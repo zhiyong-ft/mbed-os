@@ -621,7 +621,8 @@ nsapi_error_t TLSSocketWrapper::close()
 
     int ret = 0;
     if (_handshake_completed) {
-        _transport->set_blocking(true);
+        //_transport->set_blocking(true);
+        set_timeout(5000);
         ret = mbedtls_ssl_close_notify(&_ssl);
         if (ret) {
             print_mbedtls_error("mbedtls_ssl_close_notify", ret);
