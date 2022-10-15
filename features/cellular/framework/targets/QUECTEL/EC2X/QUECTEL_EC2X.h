@@ -39,6 +39,7 @@ public:
     virtual nsapi_error_t soft_power_off();
 
 private:
+    virtual AT_CellularInformation *open_information_impl(ATHandler &at);
     nsapi_error_t press_power_button(uint32_t timeout);
     bool _active_high;
     DigitalOut _pwr_key;

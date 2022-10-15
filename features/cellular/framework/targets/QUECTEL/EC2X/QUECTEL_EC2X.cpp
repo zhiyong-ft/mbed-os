@@ -16,6 +16,7 @@
  */
 
 #include "QUECTEL_EC2X.h"
+#include "QUECTEL_EC2X_CellularInformation.h"
 
 #include "PinNames.h"
 #include "AT_CellularNetwork.h"
@@ -90,12 +91,17 @@ CellularDevice *CellularDevice::get_default_instance()
 }
 #endif
 
+AT_CellularInformation *QUECTEL_EC2X::open_information_impl(ATHandler &at)
+{
+    return new QUECTEL_EC2X_CellularInformation(at);
+}
+
 nsapi_error_t QUECTEL_EC2X::press_power_button(uint32_t timeout)
 {
     _pwr_key = _active_high;
     ThisThread::sleep_for(timeout);
     _pwr_key = !_active_high;
-    ThisThread::sleep_for(100);
+    ThisThread::sleep_for(5000);
 
     return NSAPI_ERROR_OK;
 }
@@ -117,7 +123,7 @@ nsapi_error_t QUECTEL_EC2X::soft_power_on()
         _rst = _active_high;
         ThisThread::sleep_for(460);
         _rst = !_active_high;
-        ThisThread::sleep_for(100);
+        ThisThread::sleep_for(5000);
 
         _at->lock();
 
