@@ -70,18 +70,6 @@ typedef enum {
     p29 = P0_5,
     p30 = P0_4,
 
-    // Other mbed Pin Names
-#ifdef MCB1700
-    LED1 = P1_28,
-    LED2 = P1_29,
-    LED3 = P1_31,
-    LED4 = P2_2,
-#else
-    LED1 = P1_18,
-    LED2 = P1_20,
-    LED3 = P1_21,
-    LED4 = P1_23,
-#endif
     CONSOLE_TX = P0_2,
     CONSOLE_RX = P0_3,
 
@@ -111,17 +99,24 @@ typedef enum {
     A5 = P1_31,
 
     // Not connected
-    NC = (int)0xFFFFFFFF,
-
-    I2C_SCL0 = NC,
-    I2C_SDA0 = NC,
-    I2C_SCL1 = p10,
-    I2C_SDA1 = p9,
-    I2C_SCL2 = P0_11, // pin used by application board
-    I2C_SDA2 = P0_10, // pin used by application board
-    I2C_SCL = I2C_SCL2,
-    I2C_SDA = I2C_SDA2,
+    NC = (int)0xFFFFFFFF
 } PinName;
+
+// Standard buttons and LEDs
+#define LED1 P1_18
+#define LED2 P1_20
+#define LED3 P1_21
+#define LED4 P1_23
+
+// I2C pin names
+#define I2C_SCL0 NC
+#define I2C_SDA0 NC
+#define I2C_SCL1 p10
+#define I2C_SDA1 p9
+#define I2C_SCL2 P0_11 // pin used by application board
+#define I2C_SDA2 P0_10 // pin used by application board
+#define I2C_SCL I2C_SCL2
+#define I2C_SDA I2C_SDA2
 
 typedef enum {
     PullUp = 0,
