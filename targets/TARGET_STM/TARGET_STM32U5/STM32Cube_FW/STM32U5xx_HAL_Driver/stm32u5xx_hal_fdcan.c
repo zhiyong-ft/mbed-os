@@ -13,12 +13,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   @verbatim
@@ -253,7 +253,7 @@ static const uint8_t DLCtoBytes[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 16, 20, 24, 
   * @{
   */
 static void FDCAN_CalcultateRamBlockAddresses(FDCAN_HandleTypeDef *hfdcan);
-static void FDCAN_CopyMessageToRAM(FDCAN_HandleTypeDef *hfdcan, const FDCAN_TxHeaderTypeDef *pTxHeader,
+static void FDCAN_CopyMessageToRAM(const FDCAN_HandleTypeDef *hfdcan, const FDCAN_TxHeaderTypeDef *pTxHeader,
                                    const uint8_t *pTxData, uint32_t BufferIndex);
 /**
   * @}
@@ -3460,7 +3460,7 @@ static void FDCAN_CalcultateRamBlockAddresses(FDCAN_HandleTypeDef *hfdcan)
   * @param  BufferIndex index of the buffer to be configured.
   * @retval none
  */
-static void FDCAN_CopyMessageToRAM(FDCAN_HandleTypeDef *hfdcan, const FDCAN_TxHeaderTypeDef *pTxHeader,
+static void FDCAN_CopyMessageToRAM(const FDCAN_HandleTypeDef *hfdcan, const FDCAN_TxHeaderTypeDef *pTxHeader,
                                    const uint8_t *pTxData, uint32_t BufferIndex)
 {
   uint32_t TxElementW1;

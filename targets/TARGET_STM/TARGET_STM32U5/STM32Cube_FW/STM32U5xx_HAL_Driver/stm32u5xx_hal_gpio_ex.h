@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -188,6 +188,9 @@ typedef struct
 #define GPIO_AF8_UART4         ((uint8_t)0x08)  /* UART4 Alternate Function mapping                          */
 #define GPIO_AF8_UART5         ((uint8_t)0x08)  /* UART5 Alternate Function mapping                          */
 #define GPIO_AF8_SDMMC1        ((uint8_t)0x08)  /* SDMMC1 Alternate Function mapping                         */
+#if defined(SDMMC2)
+#define GPIO_AF8_SDMMC2        ((uint8_t)0x08)  /* SDMMC2 Alternate Function mapping                         */
+#endif /* SDMMC2 */
 #if defined(LTDC)
 #define GPIO_AF8_LTDC          ((uint8_t)0x08)  /* LTDC Alternate Function mapping                           */
 #endif /* LTDC */
@@ -215,6 +218,9 @@ typedef struct
 #if defined(USB_OTG_HS)
 #define GPIO_AF10_USB_HS       ((uint8_t)0x0A)  /* USB_HS Alternate Function mapping                         */
 #endif /* USB_OTG_HS */
+#if defined(DSI)
+#define GPIO_AF10_DSI          ((uint8_t)0x0A)  /* DSI Alternate Function mapping                            */
+#endif /*  DSI */
 #if defined(GFXTIM)
 #define GPIO_AF10_GFXTIM       ((uint8_t)0x0A)  /* GFXTIM Alternate Function mapping                         */
 #endif /* GFXTIM */
@@ -280,6 +286,9 @@ typedef struct
 #define GPIO_AF14_TIM16_COMP1  ((uint8_t)0x0E)  /* TIM16/COMP1 Alternate Function mapping                    */
 #define GPIO_AF14_TIM17        ((uint8_t)0x0E)  /* TIM17 Alternate Function mapping                          */
 #define GPIO_AF14_TIM17_COMP1  ((uint8_t)0x0E)  /* TIM17/COMP1 Alternate Function mapping                    */
+#if defined(FMC_BASE)
+#define GPIO_AF14_FMC          ((uint8_t)0x0E)  /* FMC Alternate Function mapping                            */
+#endif /* FMC_BASE */
 
 /**
   * @brief   AF 15 selection

@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -66,7 +66,7 @@ typedef struct
 
   uint32_t TriggerSelection;     /*!< Specifies which trigger will activate the Transmission automatically.
                                       This parameter can be a value of @ref UARTEx_Autonomous_Trigger_selection
-                                      or @ref LPUARTEx_Autonomous_Trigger_selection.*/
+                                      or @ref UARTEx_Low_Power_Autonomous_Trigger_selection.*/
 
   uint32_t TriggerPolarity;      /*!< Specifies the autonomous mode trigger signal polarity.
                                       This parameter can be a value of @ref UARTEx_Autonomous_Trigger_Polarity */
@@ -193,7 +193,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup LPUARTEx_Autonomous_Trigger_selection LPUARTEx Autonomous trigger selection
+/** @defgroup UARTEx_Low_Power_Autonomous_Trigger_selection UARTEx Low Power Autonomous trigger selection
   * @brief    LPUART Autonomous Trigger selection
   * @{
   */

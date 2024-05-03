@@ -12,12 +12,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   @verbatim
@@ -130,7 +130,7 @@
     all callbacks are set to the corresponding weak functions:
     examples HAL_DSI_TearingEffectCallback(), HAL_DSI_EndOfRefreshCallback().
     Exception done for MspInit and MspDeInit functions that are respectively
-    reset to the legacy weak (surcharged) functions in the HAL_DSI_Init()
+    reset to the legacy weak (overridden) functions in the HAL_DSI_Init()
     and HAL_DSI_DeInit() only when these callbacks are null (not registered beforehand).
     If not, MspInit or MspDeInit are not null, the HAL_DSI_Init() and HAL_DSI_DeInit()
     keep and use the user MspInit/MspDeInit callbacks (registered beforehand).
@@ -463,13 +463,6 @@ HAL_StatusTypeDef HAL_DSI_Init(DSI_HandleTypeDef *hdsi, DSI_PLLInitTypeDef *PLLI
                             ((PLLInit->PLLIDF) << DSI_WRPCR_PLL_IDF_Pos) | \
                             ((PLLInit->PLLODF) << DSI_WRPCR_PLL_ODF_Pos));
 
-  /************************ Set D-PHY Band Control registers ******************************/
-  /* Set Band Control Frequency and LPX Offset */
-  DSI_ConfigBandControl(hdsi);
-
-  /* Set PLL Tuning */
-  DSI_SetWrapperPLLTuning(hdsi, PLLInit);
-
   /* Enable the DSI PLL */
   __HAL_DSI_PLL_ENABLE(hdsi);
 
@@ -490,24 +483,60 @@ HAL_StatusTypeDef HAL_DSI_Init(DSI_HandleTypeDef *hdsi, DSI_PLLInitTypeDef *PLLI
     }
   }
 
+  __HAL_DSI_ENABLE(hdsi);
+
+  /************************ Set the DSI clock parameters ************************/
+  /* Set the TX escape clock division factor */
+  hdsi->Instance->CCR &= ~DSI_CCR_TXECKDIV;
+  hdsi->Instance->CCR |= hdsi->Init.TXEscapeCkdiv;
+
   /*************************** Set the PHY parameters ***************************/
-
   /* D-PHY clock and digital enable*/
-  hdsi->Instance->PCTLR |= (DSI_PCTLR_CKE | DSI_PCTLR_DEN);
+  hdsi->Instance->PCTLR |= DSI_PCTLR_DEN;
 
-  /* Clock lane configuration */
-  hdsi->Instance->CLCR &= ~(DSI_CLCR_DPCC | DSI_CLCR_ACR);
-  hdsi->Instance->CLCR |= (DSI_CLCR_DPCC | hdsi->Init.AutomaticClockLaneControl);
+  /************************ Set D-PHY Band Control registers ******************************/
+  /* Set Band Control Frequency and LPX Offset */
+  DSI_ConfigBandControl(hdsi);
+
+  /* Set PLL Tuning */
+  DSI_SetWrapperPLLTuning(hdsi, PLLInit);
+
+  hdsi->Instance->PCTLR |= DSI_PCTLR_CKE;
+
 
   /* Configure the number of active data lanes */
   hdsi->Instance->PCONFR &= ~DSI_PCONFR_NL;
   hdsi->Instance->PCONFR |= hdsi->Init.NumberOfLanes;
 
-  /************************ Set the DSI clock parameters ************************/
+  /* Get tick */
+  tickstart = HAL_GetTick();
+  if ((hdsi->Instance->PCONFR & DSI_PCONFR_NL) == DSI_ONE_DATA_LANE)
+  {
+    while ((hdsi->Instance->PSR & (DSI_PSR_PSS0 | DSI_PSR_PSSC)) != (DSI_PSR_PSS0 | DSI_PSR_PSSC))
+    {
+      if ((HAL_GetTick() - tickstart) > DSI_TIMEOUT_VALUE)
+      {
+        /* Process Unlocked */
+        __HAL_UNLOCK(hdsi);
 
-  /* Set the TX escape clock division factor */
-  hdsi->Instance->CCR &= ~DSI_CCR_TXECKDIV;
-  hdsi->Instance->CCR |= hdsi->Init.TXEscapeCkdiv;
+        return HAL_TIMEOUT;
+      }
+    }
+  }
+  else
+  {
+    while ((hdsi->Instance->PSR & (DSI_PSR_PSS0 | DSI_PSR_PSS1 | DSI_PSR_PSSC)) != (DSI_PSR_PSS0 | \
+                                                                                    DSI_PSR_PSS1 | DSI_PSR_PSSC))
+    {
+      if ((HAL_GetTick() - tickstart) > DSI_TIMEOUT_VALUE)
+      {
+        /* Process Unlocked */
+        __HAL_UNLOCK(hdsi);
+
+        return HAL_TIMEOUT;
+      }
+    }
+  }
 
 
   /****************************** Error management *****************************/
@@ -516,6 +545,12 @@ HAL_StatusTypeDef HAL_DSI_Init(DSI_HandleTypeDef *hdsi, DSI_PLLInitTypeDef *PLLI
   hdsi->Instance->IER[0U] = 0U;
   hdsi->Instance->IER[1U] = 0U;
   hdsi->ErrorMsk = 0U;
+
+  __HAL_DSI_DISABLE(hdsi);
+
+  /* Clock lane configuration */
+  hdsi->Instance->CLCR &= ~(DSI_CLCR_DPCC | DSI_CLCR_ACR);
+  hdsi->Instance->CLCR |= (DSI_CLCR_DPCC | hdsi->Init.AutomaticClockLaneControl);
 
   /* Initialize the error code */
   hdsi->ErrorCode = HAL_DSI_ERROR_NONE;

@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -168,8 +168,8 @@ typedef struct
 
 #if defined(SPI_TRIG_GRP2)
 #define IS_SPI_TRIG_SOURCE(__INSTANCE__, __SOURCE__)  ((IS_SPI_GRP2_INSTANCE(__INSTANCE__)) ? \
-                                                        IS_SPI_GRP2_TRIG_SOURCE(__SOURCE__) : \
-                                                        IS_SPI_GRP1_TRIG_SOURCE(__SOURCE__))
+                                                       IS_SPI_GRP2_TRIG_SOURCE(__SOURCE__) : \
+                                                       IS_SPI_GRP1_TRIG_SOURCE(__SOURCE__))
 #endif /* SPI_TRIG_GRP2 */
 
 #define IS_SPI_GRP1_TRIG_SOURCE(__SOURCE__)  (((__SOURCE__) == SPI_GRP1_GPDMA_CH0_TCF_TRG  ) || \

@@ -12,12 +12,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   @verbatim
@@ -61,6 +61,7 @@
   */
 
 #if defined(HAL_SD_MODULE_ENABLED) || defined(HAL_OSPI_MODULE_ENABLED) || defined(HAL_XSPI_MODULE_ENABLED)
+#if defined (DLYB_SDMMC1) || defined (DLYB_SDMMC2) || defined (DLYB_OCTOSPI1) || defined (DLYB_OCTOSPI2)
 
 /**
   @cond 0
@@ -206,14 +207,14 @@ uint32_t LL_DLYB_GetClockPeriod(DLYB_TypeDef *DLYBx, LL_DLYB_CfgTypeDef *pdlyb_c
       pdlyb_cfg->Units = i ;
 
       /* Disable the length sampling */
-      DLYBx->CR = DLYB_CR_SEN;
+      CLEAR_BIT(DLYBx->CR, DLYB_CR_SEN);
 
       return (uint32_t)SUCCESS;
     }
   }
 
   /* Disable the length sampling */
-  DLYBx->CR = DLYB_CR_SEN;
+  CLEAR_BIT(DLYBx->CR, DLYB_CR_SEN);
 
   return (uint32_t)ERROR;
 
@@ -230,6 +231,7 @@ uint32_t LL_DLYB_GetClockPeriod(DLYB_TypeDef *DLYBx, LL_DLYB_CfgTypeDef *pdlyb_c
 /**
   * @}
   */
+#endif /* DLYB_SDMMC1 || DLYB_SDMMC2 || DLYB_OCTOSPI1 || DLYB_OCTOSPI2 */
 #endif /* HAL_SD_MODULE_ENABLED || HAL_OSPI_MODULE_ENABLED || HAL_XSPI_MODULE_ENABLED */
 
 /**

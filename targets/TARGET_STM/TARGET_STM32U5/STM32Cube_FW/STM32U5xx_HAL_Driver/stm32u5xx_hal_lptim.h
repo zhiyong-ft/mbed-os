@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -396,7 +396,9 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 
 #define LPTIM_INPUT2SOURCE_GPIO         0x00000000U                    /*!< For LPTIM1 and LPTIM2 */
+#if defined(COMP2)
 #define LPTIM_INPUT2SOURCE_COMP2        LPTIM_CFGR2_IN2SEL_0           /*!< For LPTIM1 and LPTIM2 */
+#endif /* COMP2 */
 /**
   * @}
   */
@@ -519,7 +521,9 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   */
 #define LPTIM_IC1SOURCE_GPIO                       0x00000000UL                               /*!< For LPTIM1, LPTIM2 and LPTIM3 */
 #define LPTIM_IC1SOURCE_COMP1                      LPTIM_CFGR2_IC1SEL_0                       /*!< For LPTIM1, LPTIM2 and LPTIM3 */
+#if defined(COMP2)
 #define LPTIM_IC1SOURCE_COMP2                      LPTIM_CFGR2_IC1SEL_1                       /*!< For LPTIM1, LPTIM2 and LPTIM3 */
+#endif /* COMP2 */
 #define LPTIM_IC2SOURCE_GPIO                       0x00000000UL                               /*!< For LPTIM1, LPTIM2 and LPTIM3 */
 #define LPTIM_IC2SOURCE_LSI                        LPTIM_CFGR2_IC2SEL_0                       /*!< For LPTIM1 */
 #define LPTIM_IC2SOURCE_LSE                        LPTIM_CFGR2_IC2SEL_1                       /*!< For LPTIM1 */
@@ -1073,9 +1077,6 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(const LPTIM_HandleTypeDef *hlptim);
 #define IS_LPTIM_COUNTER_SOURCE(__SOURCE__)     (((__SOURCE__) == LPTIM_COUNTERSOURCE_INTERNAL) || \
                                                  ((__SOURCE__) == LPTIM_COUNTERSOURCE_EXTERNAL))
 
-#define IS_LPTIM_AUTORELOAD(__AUTORELOAD__)     ((0x00000001UL <= (__AUTORELOAD__)) &&\
-                                                 ((__AUTORELOAD__) <= 0x0000FFFFUL))
-
 #define IS_LPTIM_COMPARE(__COMPARE__)           ((__COMPARE__) <= 0x0000FFFFUL)
 
 #define IS_LPTIM_PERIOD(__PERIOD__)             ((0x00000001UL <= (__PERIOD__)) &&\
@@ -1109,12 +1110,20 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(const LPTIM_HandleTypeDef *hlptim);
    (((__SOURCE__) == LPTIM_INPUT1SOURCE_GPIO) || \
     ((__SOURCE__) == LPTIM_INPUT1SOURCE_COMP1)))
 
+#if defined(COMP2)
 #define IS_LPTIM_INPUT2_SOURCE(__INSTANCE__, __SOURCE__) \
   ((((__INSTANCE__) == LPTIM1) || \
     ((__INSTANCE__) == LPTIM2)) && \
    (((__SOURCE__) == LPTIM_INPUT2SOURCE_GPIO) || \
     ((__SOURCE__) == LPTIM_INPUT2SOURCE_COMP2)))
+#else
+#define IS_LPTIM_INPUT2_SOURCE(__INSTANCE__, __SOURCE__) \
+  ((((__INSTANCE__) == LPTIM1) || \
+    ((__INSTANCE__) == LPTIM2)) && \
+   (((__SOURCE__) == LPTIM_INPUT2SOURCE_GPIO)))
+#endif /* COMP2 */
 
+#if defined(COMP2)
 #define IS_LPTIM_IC1_SOURCE(__INSTANCE__, __SOURCE__) \
   ((((__INSTANCE__) == LPTIM1) ||                  \
     ((__INSTANCE__) == LPTIM2)||                   \
@@ -1122,6 +1131,14 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(const LPTIM_HandleTypeDef *hlptim);
    (((__SOURCE__) == LPTIM_IC1SOURCE_GPIO) ||       \
     ((__SOURCE__) == LPTIM_IC1SOURCE_COMP1) ||      \
     ((__SOURCE__) == LPTIM_IC1SOURCE_COMP2)))
+#else
+#define IS_LPTIM_IC1_SOURCE(__INSTANCE__, __SOURCE__) \
+  ((((__INSTANCE__) == LPTIM1) ||                  \
+    ((__INSTANCE__) == LPTIM2)||                   \
+    ((__INSTANCE__) == LPTIM3)) &&                 \
+   (((__SOURCE__) == LPTIM_IC1SOURCE_GPIO) ||       \
+    ((__SOURCE__) == LPTIM_IC1SOURCE_COMP1)))
+#endif /* COMP2 */
 
 #define IS_LPTIM_IC2_SOURCE(__INSTANCE__, __SOURCE__) \
   ((((__INSTANCE__) == LPTIM1) &&                   \

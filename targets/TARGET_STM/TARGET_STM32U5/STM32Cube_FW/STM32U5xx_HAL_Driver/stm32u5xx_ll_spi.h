@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -923,7 +923,7 @@ __STATIC_INLINE uint32_t LL_SPI_IsEnabledIOLock(const SPI_TypeDef *SPIx)
   */
 __STATIC_INLINE void LL_SPI_SetTxCRCInitPattern(SPI_TypeDef *SPIx, uint32_t TXCRCInitAll)
 {
-  MODIFY_REG(SPIx->CR1, SPI_CR1_RCRCINI, TXCRCInitAll);
+  MODIFY_REG(SPIx->CR1, SPI_CR1_TCRCINI, TXCRCInitAll);
 }
 
 /**
@@ -1241,7 +1241,8 @@ __STATIC_INLINE uint32_t LL_SPI_GetNSSPolarity(const SPI_TypeDef *SPIx)
   * @brief  Set Baudrate Prescaler
   * @note   This configuration can not be changed when SPI is enabled.
   *         SPI BaudRate = fPCLK/Pescaler.
-  * @rmtoll CFG1         MBR BPASS    LL_SPI_SetBaudRatePrescaler
+  * @rmtoll CFG1         MBR            LL_SPI_SetBaudRatePrescaler\n
+  *         CFG1         BPASS          LL_SPI_SetBaudRatePrescaler
   * @param  SPIx SPI Instance
   * @param  Baudrate This parameter can be one of the following values:
   *         @arg @ref LL_SPI_BAUDRATEPRESCALER_BYPASS
@@ -1262,7 +1263,8 @@ __STATIC_INLINE void LL_SPI_SetBaudRatePrescaler(SPI_TypeDef *SPIx, uint32_t Bau
 
 /**
   * @brief  Get Baudrate Prescaler
-  * @rmtoll CFG1         MBR BPASS    LL_SPI_GetBaudRatePrescaler
+  * @rmtoll CFG1         MBR           LL_SPI_GetBaudRatePrescaler\n
+  *         CFG1         BPASS         LL_SPI_GetBaudRatePrescaler
   * @param  SPIx SPI Instance
   * @retval Returned value can be one of the following values:
   *         @arg @ref LL_SPI_BAUDRATEPRESCALER_BYPASS

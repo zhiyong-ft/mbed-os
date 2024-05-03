@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -77,8 +77,8 @@
                                      || ((__VALUE__) == LL_TIM_OCMODE_RETRIG_OPM2) \
                                      || ((__VALUE__) == LL_TIM_OCMODE_COMBINED_PWM1) \
                                      || ((__VALUE__) == LL_TIM_OCMODE_COMBINED_PWM2) \
-                                     || ((__VALUE__) == LL_TIM_OCMODE_ASSYMETRIC_PWM1) \
-                                     || ((__VALUE__) == LL_TIM_OCMODE_ASSYMETRIC_PWM2) \
+                                     || ((__VALUE__) == LL_TIM_OCMODE_ASYMMETRIC_PWM1) \
+                                     || ((__VALUE__) == LL_TIM_OCMODE_ASYMMETRIC_PWM2) \
                                      || ((__VALUE__) == LL_TIM_OCMODE_PULSE_ON_COMPARE) \
                                      || ((__VALUE__) == LL_TIM_OCMODE_DIRECTION_OUTPUT))
 
@@ -760,7 +760,6 @@ ErrorStatus LL_TIM_BDTR_Init(TIM_TypeDef *TIMx, const LL_TIM_BDTR_InitTypeDef *T
   MODIFY_REG(tmpbdtr, TIM_BDTR_BKE, TIM_BDTRInitStruct->BreakState);
   MODIFY_REG(tmpbdtr, TIM_BDTR_BKP, TIM_BDTRInitStruct->BreakPolarity);
   MODIFY_REG(tmpbdtr, TIM_BDTR_AOE, TIM_BDTRInitStruct->AutomaticOutput);
-  MODIFY_REG(tmpbdtr, TIM_BDTR_MOE, TIM_BDTRInitStruct->AutomaticOutput);
   assert_param(IS_LL_TIM_BREAK_FILTER(TIM_BDTRInitStruct->BreakFilter));
   assert_param(IS_LL_TIM_BREAK_AFMODE(TIM_BDTRInitStruct->BreakAFMode));
   MODIFY_REG(tmpbdtr, TIM_BDTR_BKF, TIM_BDTRInitStruct->BreakFilter);

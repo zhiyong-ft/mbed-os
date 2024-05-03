@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -154,7 +154,7 @@ typedef void (*pIWDG_CallbackTypeDef)(IWDG_HandleTypeDef *hppp);  /*!< pointer t
 
 /**
   * @brief  Reload IWDG counter with value defined in the reload register
-  *         (write access to IWDG_PR, IWDG_RLR, IWDG_WINR and EWCR registers disabled).
+  *         (write access to IWDG_PR, IWDG_RLR, IWDG_WINR, IWDG_EWCR registers disabled).
   * @param  __HANDLE__  IWDG handle
   * @retval None
   */
@@ -223,14 +223,14 @@ void                  HAL_IWDG_EarlyWakeupCallback(IWDG_HandleTypeDef *hiwdg);
   */
 
 /**
-  * @brief  Enable write access to IWDG_PR, IWDG_RLR, IWDG_WINR and EWCR registers.
+  * @brief  Enable write access to IWDG_PR, IWDG_RLR, IWDG_WINR, IWDG_EWCR registers.
   * @param  __HANDLE__  IWDG handle
   * @retval None
   */
 #define IWDG_ENABLE_WRITE_ACCESS(__HANDLE__)  WRITE_REG((__HANDLE__)->Instance->KR, IWDG_KEY_WRITE_ACCESS_ENABLE)
 
 /**
-  * @brief  Disable write access to IWDG_PR, IWDG_RLR, IWDG_WINR and EWCR registers.
+  * @brief  Disable write access to IWDG_PR, IWDG_RLR, IWDG_WINR, IWDG_EWCR registers.
   * @param  __HANDLE__  IWDG handle
   * @retval None
   */

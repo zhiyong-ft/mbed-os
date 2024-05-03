@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -339,10 +339,10 @@ HAL_StatusTypeDef HAL_HCD_ResumePort(HCD_HandleTypeDef *hhcd);
 /** @addtogroup HCD_Exported_Functions_Group4 Peripheral State functions
   * @{
   */
-HCD_StateTypeDef        HAL_HCD_GetState(HCD_HandleTypeDef *hhcd);
-HCD_URBStateTypeDef     HAL_HCD_HC_GetURBState(HCD_HandleTypeDef *hhcd, uint8_t chnum);
-HCD_HCStateTypeDef      HAL_HCD_HC_GetState(HCD_HandleTypeDef *hhcd, uint8_t chnum);
-uint32_t                HAL_HCD_HC_GetXferCount(HCD_HandleTypeDef *hhcd, uint8_t chnum);
+HCD_StateTypeDef        HAL_HCD_GetState(HCD_HandleTypeDef const *hhcd);
+HCD_URBStateTypeDef     HAL_HCD_HC_GetURBState(HCD_HandleTypeDef const *hhcd, uint8_t chnum);
+HCD_HCStateTypeDef      HAL_HCD_HC_GetState(HCD_HandleTypeDef const *hhcd, uint8_t chnum);
+uint32_t                HAL_HCD_HC_GetXferCount(HCD_HandleTypeDef const *hhcd, uint8_t chnum);
 uint32_t                HAL_HCD_GetCurrentFrame(HCD_HandleTypeDef *hhcd);
 uint32_t                HAL_HCD_GetCurrentSpeed(HCD_HandleTypeDef *hhcd);
 
@@ -386,11 +386,14 @@ HAL_StatusTypeDef  HAL_HCD_PMAReset(HCD_HandleTypeDef *hhcd);
 /** @defgroup HCD_ENDP_Kind HCD Endpoint Kind
   * @{
   */
-#define HCD_SNG_BUF                            0U
-#define HCD_DBL_BUF                            1U
+#define HCD_SNG_BUF                              0U
+#define HCD_DBL_BUF                              1U
 /**
   * @}
   */
+
+/* Powerdown exit count */
+#define HCD_PDWN_EXIT_CNT                    0x100U
 
 /* Set Channel */
 #define HCD_SET_CHANNEL                        USB_DRD_SET_CHEP
@@ -522,13 +525,14 @@ HAL_StatusTypeDef  HAL_HCD_PMAReset(HCD_HandleTypeDef *hhcd);
 __STATIC_INLINE uint16_t HCD_GET_CH_RX_CNT(HCD_TypeDef *Instance, uint16_t bChNum)
 {
   uint32_t HostCoreSpeed;
+  uint32_t ep_reg = USB_DRD_GET_CHEP(Instance, bChNum);
   __IO uint32_t count = 10U;
 
   /* Get Host core Speed */
   HostCoreSpeed = USB_GetHostSpeed(Instance);
 
   /* Count depends on device LS */
-  if (HostCoreSpeed == USB_DRD_SPEED_LS)
+  if ((HostCoreSpeed == USB_DRD_SPEED_LS) || ((ep_reg & USB_CHEP_LSEP) == USB_CHEP_LSEP))
   {
     count = (70U * (HAL_RCC_GetHCLKFreq() / 1000000U)) / 100U;
   }

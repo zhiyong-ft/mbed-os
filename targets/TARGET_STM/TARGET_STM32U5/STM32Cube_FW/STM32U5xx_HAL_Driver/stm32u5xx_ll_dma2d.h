@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -940,8 +940,7 @@ __STATIC_INLINE uint32_t LL_DMA2D_GetOutputMemAddr(const DMA2D_TypeDef *DMA2Dx)
   */
 __STATIC_INLINE void LL_DMA2D_SetOutputColor(DMA2D_TypeDef *DMA2Dx, uint32_t OutputColor)
 {
-  MODIFY_REG(DMA2Dx->OCOLR, (DMA2D_OCOLR_BLUE_1 | DMA2D_OCOLR_GREEN_1 | DMA2D_OCOLR_RED_1 | DMA2D_OCOLR_ALPHA_1), \
-             OutputColor);
+  WRITE_REG(DMA2Dx->OCOLR, OutputColor);
 }
 
 /**
@@ -1448,7 +1447,7 @@ __STATIC_INLINE void LL_DMA2D_FGND_SetChrSubSampling(DMA2D_TypeDef *DMA2Dx, uint
   *         @arg @ref LL_DMA2D_CSS_422
   *         @arg @ref LL_DMA2D_CSS_420
   */
-__STATIC_INLINE uint32_t LL_DMA2D_FGND_GetChrSubSampling(DMA2D_TypeDef *DMA2Dx)
+__STATIC_INLINE uint32_t LL_DMA2D_FGND_GetChrSubSampling(const DMA2D_TypeDef *DMA2Dx)
 {
   return (uint32_t)(READ_BIT(DMA2Dx->FGPFCCR, DMA2D_FGPFCCR_CSS));
 }

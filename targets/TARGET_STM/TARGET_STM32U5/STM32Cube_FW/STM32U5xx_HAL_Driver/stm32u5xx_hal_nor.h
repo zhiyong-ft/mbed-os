@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -24,6 +24,7 @@
 extern "C" {
 #endif
 
+#if defined(FMC_BANK1)
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32u5xx_ll_fmc.h"
@@ -183,7 +184,7 @@ HAL_StatusTypeDef HAL_NOR_Init(NOR_HandleTypeDef *hnor, FMC_NORSRAM_TimingTypeDe
 HAL_StatusTypeDef HAL_NOR_DeInit(NOR_HandleTypeDef *hnor);
 void HAL_NOR_MspInit(NOR_HandleTypeDef *hnor);
 void HAL_NOR_MspDeInit(NOR_HandleTypeDef *hnor);
-void HAL_NOR_MspWait(const NOR_HandleTypeDef *hnor, uint32_t Timeout);
+void HAL_NOR_MspWait(NOR_HandleTypeDef *hnor, uint32_t Timeout);
 /**
   * @}
   */
@@ -234,7 +235,7 @@ HAL_StatusTypeDef HAL_NOR_WriteOperation_Disable(NOR_HandleTypeDef *hnor);
 
 /* NOR State functions ********************************************************/
 HAL_NOR_StateTypeDef  HAL_NOR_GetState(const NOR_HandleTypeDef *hnor);
-HAL_NOR_StatusTypeDef HAL_NOR_GetStatus(const NOR_HandleTypeDef *hnor, uint32_t Address, uint32_t Timeout);
+HAL_NOR_StatusTypeDef HAL_NOR_GetStatus(NOR_HandleTypeDef *hnor, uint32_t Address, uint32_t Timeout);
 /**
   * @}
   */
@@ -316,6 +317,7 @@ HAL_NOR_StatusTypeDef HAL_NOR_GetStatus(const NOR_HandleTypeDef *hnor, uint32_t 
   * @}
   */
 
+#endif /* FMC_BANK1 */
 
 #ifdef __cplusplus
 }

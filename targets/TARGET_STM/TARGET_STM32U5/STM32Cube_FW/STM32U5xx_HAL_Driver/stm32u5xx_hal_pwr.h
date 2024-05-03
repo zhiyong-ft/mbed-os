@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -105,8 +105,9 @@ typedef struct
 /** @defgroup PWR_Sleep_Mode_Entry PWR Sleep Mode Entry
   * @{
   */
-#define PWR_SLEEPENTRY_WFI (0x01U) /*!< Wait For Interruption instruction to enter Sleep mode */
-#define PWR_SLEEPENTRY_WFE (0x02U) /*!< Wait For Event instruction to enter Sleep mode        */
+#define PWR_SLEEPENTRY_WFI              (0x01U) /*!< Wait For Interruption instruction to enter Sleep mode */
+#define PWR_SLEEPENTRY_WFE              (0x02U) /*!< Wait For Event instruction to enter Sleep mode        */
+#define PWR_SLEEPENTRY_WFE_NO_EVT_CLEAR (0x03U)
 /**
   * @}
   */
@@ -114,8 +115,9 @@ typedef struct
 /** @defgroup PWR_Stop_Mode_Entry PWR Stop Mode Entry
   * @{
   */
-#define PWR_STOPENTRY_WFI (0x01U) /*!< Wait For Interruption instruction to enter Stop mode */
-#define PWR_STOPENTRY_WFE (0x02U) /*!< Wait For Event instruction to enter Stop mode        */
+#define PWR_STOPENTRY_WFI              (0x01U) /*!< Wait For Interruption instruction to enter Stop mode */
+#define PWR_STOPENTRY_WFE              (0x02U) /*!< Wait For Event instruction to enter Stop mode        */
+#define PWR_STOPENTRY_WFE_NO_EVT_CLEAR (0x03U)
 /**
   * @}
   */
@@ -702,12 +704,14 @@ typedef struct
    ((MODE) == PWR_PVD_MODE_EVENT_RISING_FALLING))
 
 /* Sleep mode entry check macro */
-#define IS_PWR_SLEEP_ENTRY(ENTRY) \
-  (((ENTRY) == PWR_SLEEPENTRY_WFI) || ((ENTRY) == PWR_SLEEPENTRY_WFE))
+#define IS_PWR_SLEEP_ENTRY(ENTRY) (((ENTRY) == PWR_SLEEPENTRY_WFI) ||\
+                                   ((ENTRY) == PWR_SLEEPENTRY_WFE) ||\
+                                   ((ENTRY) == PWR_SLEEPENTRY_WFE_NO_EVT_CLEAR))
 
 /* Stop mode entry check macro */
-#define IS_PWR_STOP_ENTRY(ENTRY) \
-  (((ENTRY) == PWR_STOPENTRY_WFI) || ((ENTRY) == PWR_STOPENTRY_WFE))
+#define IS_PWR_STOP_ENTRY(ENTRY) (((ENTRY) == PWR_STOPENTRY_WFI) ||\
+                                  ((ENTRY) == PWR_STOPENTRY_WFE) ||\
+                                  ((ENTRY) == PWR_STOPENTRY_WFE_NO_EVT_CLEAR))
 
 /* PWR items check macro */
 #define IS_PWR_ITEMS_ATTRIBUTES(ITEM) \

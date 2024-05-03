@@ -11,12 +11,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   @verbatim
@@ -361,21 +361,6 @@ HAL_StatusTypeDef HAL_RCC_DeInit(void)
 {
   uint32_t tickstart;
 
-  /* Increasing the CPU frequency */
-  if (FLASH_LATENCY_DEFAULT  > __HAL_FLASH_GET_LATENCY())
-  {
-    /* Program the new number of wait states to the LATENCY bits in the FLASH_ACR register */
-    __HAL_FLASH_SET_LATENCY(FLASH_LATENCY_DEFAULT);
-
-    /* Check that the new number of wait states is taken into account to access the Flash
-    memory by reading the FLASH_ACR register */
-    if (__HAL_FLASH_GET_LATENCY() != FLASH_LATENCY_DEFAULT)
-    {
-      return HAL_ERROR;
-    }
-
-  }
-
   tickstart = HAL_GetTick();
 
   /* Set MSION bit */
@@ -507,17 +492,15 @@ HAL_StatusTypeDef HAL_RCC_DeInit(void)
   SystemCoreClock = MSI_VALUE;
 
   /* Decreasing the number of wait states because of lower CPU frequency */
-  if (FLASH_LATENCY_DEFAULT  < __HAL_FLASH_GET_LATENCY())
-  {
-    /* Program the new number of wait states to the LATENCY bits in the FLASH_ACR register */
-    __HAL_FLASH_SET_LATENCY(FLASH_LATENCY_DEFAULT);
 
-    /* Check that the new number of wait states is taken into account to access the Flash
-    memory by reading the FLASH_ACR register */
-    if (__HAL_FLASH_GET_LATENCY() != FLASH_LATENCY_DEFAULT)
-    {
-      return HAL_ERROR;
-    }
+  /* Program the new number of wait states to the LATENCY bits in the FLASH_ACR register */
+  __HAL_FLASH_SET_LATENCY(FLASH_LATENCY_DEFAULT);
+
+  /* Check that the new number of wait states is taken into account to access the Flash
+  memory by reading the FLASH_ACR register */
+  if (__HAL_FLASH_GET_LATENCY() != FLASH_LATENCY_DEFAULT)
+  {
+    return HAL_ERROR;
   }
 
   /* Adapt Systick interrupt period */
@@ -1242,9 +1225,6 @@ HAL_StatusTypeDef HAL_RCC_OscConfig(const RCC_OscInitTypeDef  *pRCC_OscInitStruc
           __HAL_RCC_PWR_CLK_DISABLE();
         }
 
-        /* Enable PLL System Clock output */
-        __HAL_RCC_PLLCLKOUT_ENABLE(RCC_PLL1_DIVR);
-
         /* Enable the main PLL */
         __HAL_RCC_PLL_ENABLE();
 
@@ -1258,6 +1238,10 @@ HAL_StatusTypeDef HAL_RCC_OscConfig(const RCC_OscInitTypeDef  *pRCC_OscInitStruc
             return HAL_TIMEOUT;
           }
         }
+
+        /* Enable PLL System Clock output */
+        __HAL_RCC_PLLCLKOUT_ENABLE(RCC_PLL1_DIVR);
+
       }
       else
       {
@@ -1787,34 +1771,27 @@ uint32_t HAL_RCC_GetSysClockFreq(void)
     fracn1 = (float_t)(uint32_t)(pllfracen * ((RCC->PLL1FRACR & RCC_PLL1FRACR_PLL1FRACN) >> \
                                               RCC_PLL1FRACR_PLL1FRACN_Pos));
 
-    if (pllm != 0U)
+    switch (pllsource)
     {
-      switch (pllsource)
-      {
-        case RCC_PLLSOURCE_HSI:  /* HSI used as PLL clock source */
-          pllvco = ((float_t)HSI_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1N) + \
-                                                           (fracn1 / (float_t)0x2000) + (float_t)1U);
-          break;
+      case RCC_PLLSOURCE_HSI:  /* HSI used as PLL clock source */
+        pllvco = ((float_t)HSI_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1N) + \
+                                                         (fracn1 / (float_t)0x2000) + (float_t)1U);
+        break;
 
-        case RCC_PLLSOURCE_HSE:  /* HSE used as PLL clock source */
-          pllvco = ((float_t)HSE_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1N) + \
-                                                           (fracn1 / (float_t)0x2000) + (float_t)1U);
-          break;
+      case RCC_PLLSOURCE_HSE:  /* HSE used as PLL clock source */
+        pllvco = ((float_t)HSE_VALUE / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1N) + \
+                                                         (fracn1 / (float_t)0x2000) + (float_t)1U);
+        break;
 
-        case RCC_PLLSOURCE_MSI:  /* MSI used as PLL clock source */
-        default:
-          pllvco = ((float_t) msirange / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1N) + \
-                                                           (fracn1 / (float_t)0x2000) + (float_t)1U);
-          break;
-      }
-
-      pllr = (((RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1R) >> RCC_PLL1DIVR_PLL1R_Pos) + 1U);
-      sysclockfreq = (uint32_t)(float_t)((float_t)pllvco / (float_t)pllr);
+      case RCC_PLLSOURCE_MSI:  /* MSI used as PLL clock source */
+      default:
+        pllvco = ((float_t) msirange / (float_t)pllm) * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1N) + \
+                                                         (fracn1 / (float_t)0x2000) + (float_t)1U);
+        break;
     }
-    else
-    {
-      sysclockfreq = 0;
-    }
+
+    pllr = (((RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1R) >> RCC_PLL1DIVR_PLL1R_Pos) + 1U);
+    sysclockfreq = (uint32_t)(float_t)((float_t)pllvco / (float_t)pllr);
   }
 
   return sysclockfreq;
@@ -2050,11 +2027,11 @@ void HAL_RCC_NMI_IRQHandler(void)
   /* Check RCC CSSF interrupt flag  */
   if (__HAL_RCC_GET_IT(RCC_IT_CSS))
   {
-    /* RCC Clock Security System interrupt user callback */
-    HAL_RCC_CSSCallback();
-
     /* Clear RCC CSS pending bit */
     __HAL_RCC_CLEAR_IT(RCC_IT_CSS);
+
+    /* RCC Clock Security System interrupt user callback */
+    HAL_RCC_CSSCallback();
   }
 }
 

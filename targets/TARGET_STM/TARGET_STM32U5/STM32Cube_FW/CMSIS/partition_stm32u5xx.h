@@ -13,12 +13,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -54,6 +54,14 @@
   #include "partition_stm32u599xx.h"
 #elif defined(STM32U5A9xx)
   #include "partition_stm32u5a9xx.h"
+#elif defined(STM32U5F7xx)
+  #include "partition_stm32u5f7xx.h"
+#elif defined(STM32U5G7xx)
+  #include "partition_stm32u5g7xx.h"
+#elif defined(STM32U5F9xx)
+  #include "partition_stm32u5f9xx.h"
+#elif defined(STM32U5G9xx)
+  #include "partition_stm32u5g9xx.h"
 #elif defined(STM32U535xx)
   #include "partition_stm32u535xx.h"
 #elif defined(STM32U545xx)

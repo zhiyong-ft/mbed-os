@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -483,6 +483,22 @@ typedef struct
   * @}
   */
 
+/* Private defines -----------------------------------------------------------*/
+/** @addtogroup  FMAC_Private_Constants
+  * @{
+  */
+
+#define FMAC_PARAM_P_MAX_IIR  64U /*!< Maximum value of P parameter with IIR */
+#define FMAC_PARAM_P_MAX_FIR 127U /*!< Maximum value of P parameter with FIR */
+#define FMAC_PARAM_P_MIN       2U /*!< Minimum value of P parameter */
+#define FMAC_PARAM_Q_MAX      63U /*!< Maximum value of Q parameter */
+#define FMAC_PARAM_Q_MIN       1U /*!< Minimum value of Q parameter */
+#define FMAC_PARAM_R_MAX       7U /*!< Maximum value of R parameter */
+
+/**
+  * @}
+  */
+
 /* Private Macros-----------------------------------------------------------*/
 /** @addtogroup  FMAC_Private_Macros FMAC Private Macros
   * @{
@@ -549,10 +565,12 @@ typedef struct
   * @param  __FUNCTION__ ID of the filter function.
   * @retval SET (__P__ is a valid value) or RESET (__P__ is invalid)
   */
-#define IS_FMAC_PARAM_P(__FUNCTION__, __P__) ( (((__FUNCTION__) == FMAC_FUNC_CONVO_FIR)               && \
-                                                (((__P__) >= 2U) && ((__P__) <= 127U)))               || \
-                                               (((__FUNCTION__) == FMAC_FUNC_IIR_DIRECT_FORM_1)       && \
-                                                (((__P__) >= 2U) && ((__P__) <= 64U))) )
+#define IS_FMAC_PARAM_P(__FUNCTION__, __P__) ((((__FUNCTION__) == FMAC_FUNC_CONVO_FIR)               && \
+                                               (((__P__) >= FMAC_PARAM_P_MIN) && \
+                                                ((__P__) <= FMAC_PARAM_P_MAX_FIR))) || \
+                                              (((__FUNCTION__) == FMAC_FUNC_IIR_DIRECT_FORM_1)       && \
+                                               (((__P__) >= FMAC_PARAM_P_MIN) && \
+                                                ((__P__) <= FMAC_PARAM_P_MAX_IIR))))
 
 /**
   * @brief  Verify the FMAC filter parameter Q.
@@ -562,7 +580,7 @@ typedef struct
   */
 #define IS_FMAC_PARAM_Q(__FUNCTION__, __Q__) ( ((__FUNCTION__) == FMAC_FUNC_CONVO_FIR)                || \
                                                (((__FUNCTION__) == FMAC_FUNC_IIR_DIRECT_FORM_1)       && \
-                                                (((__Q__) >= 1U) && ((__Q__) <= 63U))) )
+                                                (((__Q__) >= FMAC_PARAM_Q_MIN) && ((__Q__) <= FMAC_PARAM_Q_MAX))) )
 
 /**
   * @brief  Verify the FMAC filter parameter R.
@@ -572,7 +590,7 @@ typedef struct
   */
 #define IS_FMAC_PARAM_R(__FUNCTION__, __R__) ( (((__FUNCTION__) == FMAC_FUNC_CONVO_FIR)               || \
                                                 ((__FUNCTION__) == FMAC_FUNC_IIR_DIRECT_FORM_1))      && \
-                                               ((__R__) <= 7U))
+                                               ((__R__) <= FMAC_PARAM_R_MAX))
 
 /**
   * @brief  Verify the FMAC buffer access.

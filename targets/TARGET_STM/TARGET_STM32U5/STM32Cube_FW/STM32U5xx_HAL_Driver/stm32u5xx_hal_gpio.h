@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -277,6 +277,23 @@ typedef enum
 
 #define IS_GPIO_PIN(__PIN__)        ((((uint32_t)(__PIN__) & GPIO_PIN_MASK) != 0x00U) &&\
                                      (((uint32_t)(__PIN__) & ~GPIO_PIN_MASK) == 0x00U))
+
+#define IS_GPIO_SINGLE_PIN(__PIN__) (((__PIN__) == GPIO_PIN_0)   ||\
+                                     ((__PIN__) == GPIO_PIN_1)   ||\
+                                     ((__PIN__) == GPIO_PIN_2)   ||\
+                                     ((__PIN__) == GPIO_PIN_3)   ||\
+                                     ((__PIN__) == GPIO_PIN_4)   ||\
+                                     ((__PIN__) == GPIO_PIN_5)   ||\
+                                     ((__PIN__) == GPIO_PIN_6)   ||\
+                                     ((__PIN__) == GPIO_PIN_7)   ||\
+                                     ((__PIN__) == GPIO_PIN_8)   ||\
+                                     ((__PIN__) == GPIO_PIN_9)   ||\
+                                     ((__PIN__) == GPIO_PIN_10)  ||\
+                                     ((__PIN__) == GPIO_PIN_11)  ||\
+                                     ((__PIN__) == GPIO_PIN_12)  ||\
+                                     ((__PIN__) == GPIO_PIN_13)  ||\
+                                     ((__PIN__) == GPIO_PIN_14)  ||\
+                                     ((__PIN__) == GPIO_PIN_15))
 
 #define IS_GPIO_COMMON_PIN(__RESETMASK__, __SETMASK__)  \
   (((uint32_t)(__RESETMASK__) & (uint32_t)(__SETMASK__)) == 0x00u)

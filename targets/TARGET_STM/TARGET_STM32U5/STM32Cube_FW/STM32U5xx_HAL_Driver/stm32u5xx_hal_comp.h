@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -535,10 +535,10 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
   * @brief  Enable the COMP2 EXTI line rising & falling edge trigger.
   * @retval None
   */
-#define __HAL_COMP_COMP2_EXTI_ENABLE_RISING_FALLING_EDGE()   do { \
-                                                                  __HAL_COMP_COMP2_EXTI_ENABLE_RISING_EDGE(); \
-                                                                  __HAL_COMP_COMP2_EXTI_ENABLE_FALLING_EDGE(); \
-                                                                } while(0)
+#define __HAL_COMP_COMP2_EXTI_ENABLE_RISING_FALLING_EDGE() do {                                                        \
+                                                                __HAL_COMP_COMP2_EXTI_ENABLE_RISING_EDGE();            \
+                                                                __HAL_COMP_COMP2_EXTI_ENABLE_FALLING_EDGE();           \
+                                                              } while(0)
 
 /**
   * @brief  Disable the COMP2 EXTI line rising & falling edge trigger.
@@ -753,11 +753,11 @@ typedef  void (*pCOMP_CallbackTypeDef)(COMP_HandleTypeDef *hcomp); /*!< pointer 
 
 
 /* Exported functions --------------------------------------------------------*/
-/** @addtogroup COMP_Exported_Functions
+/** @addtogroup COMP_Exported_Functions COMP Exported Functions
   * @{
   */
 
-/** @addtogroup COMP_Exported_Functions_Group1
+/** @addtogroup COMP_Exported_Functions_Group1 Initialization/de-initialization functions
   * @{
   */
 
@@ -778,7 +778,7 @@ HAL_StatusTypeDef HAL_COMP_UnRegisterCallback(COMP_HandleTypeDef *hcomp, HAL_COM
   */
 
 /* IO operation functions  *****************************************************/
-/** @addtogroup COMP_Exported_Functions_Group2
+/** @addtogroup COMP_Exported_Functions_Group2 Start-Stop operation functions
   * @{
   */
 HAL_StatusTypeDef HAL_COMP_Start(COMP_HandleTypeDef *hcomp);
@@ -789,7 +789,7 @@ void              HAL_COMP_IRQHandler(COMP_HandleTypeDef *hcomp);
   */
 
 /* Peripheral Control functions  ************************************************/
-/** @addtogroup COMP_Exported_Functions_Group3
+/** @addtogroup COMP_Exported_Functions_Group3 Peripheral Control functions
   * @{
   */
 HAL_StatusTypeDef HAL_COMP_Lock(COMP_HandleTypeDef *hcomp);
@@ -801,7 +801,7 @@ void              HAL_COMP_TriggerCallback(COMP_HandleTypeDef *hcomp);
   */
 
 /* Peripheral State functions  **************************************************/
-/** @addtogroup COMP_Exported_Functions_Group4
+/** @addtogroup COMP_Exported_Functions_Group4 Peripheral State functions
   * @{
   */
 HAL_COMP_StateTypeDef HAL_COMP_GetState(const COMP_HandleTypeDef *hcomp);

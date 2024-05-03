@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -230,7 +230,8 @@ __STATIC_INLINE uint32_t LL_RNG_IsEnabled(const RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_EnableClkErrorDetect(RNG_TypeDef *RNGx)
 {
-  CLEAR_BIT(RNGx->CR, RNG_CR_CED);
+  MODIFY_REG(RNGx->CR, RNG_CR_CED | RNG_CR_CONDRST, LL_RNG_CED_ENABLE | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**
@@ -241,7 +242,8 @@ __STATIC_INLINE void LL_RNG_EnableClkErrorDetect(RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_DisableClkErrorDetect(RNG_TypeDef *RNGx)
 {
-  SET_BIT(RNGx->CR, RNG_CR_CED);
+  MODIFY_REG(RNGx->CR, RNG_CR_CED | RNG_CR_CONDRST, LL_RNG_CED_DISABLE | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**
@@ -318,7 +320,8 @@ __STATIC_INLINE uint32_t LL_RNG_IsConfigLocked(const RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_EnableNistCompliance(RNG_TypeDef *RNGx)
 {
-  CLEAR_BIT(RNGx->CR, RNG_CR_NISTC);
+  MODIFY_REG(RNGx->CR, RNG_CR_NISTC | RNG_CR_CONDRST, LL_RNG_NIST_COMPLIANT | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**
@@ -329,7 +332,8 @@ __STATIC_INLINE void LL_RNG_EnableNistCompliance(RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_DisableNistCompliance(RNG_TypeDef *RNGx)
 {
-  SET_BIT(RNGx->CR, RNG_CR_NISTC);
+  MODIFY_REG(RNGx->CR, RNG_CR_NISTC | RNG_CR_CONDRST, LL_RNG_CUSTOM_NIST | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**
@@ -352,7 +356,8 @@ __STATIC_INLINE uint32_t LL_RNG_IsEnabledNistCompliance(const RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_SetConfig1(RNG_TypeDef *RNGx, uint32_t Config1)
 {
-  MODIFY_REG(RNGx->CR, RNG_CR_RNG_CONFIG1, Config1 << RNG_CR_RNG_CONFIG1_Pos);
+  MODIFY_REG(RNGx->CR, RNG_CR_RNG_CONFIG1 | RNG_CR_CONDRST, (Config1 << RNG_CR_RNG_CONFIG1_Pos) | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**
@@ -375,7 +380,8 @@ __STATIC_INLINE uint32_t LL_RNG_GetConfig1(const RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_SetConfig2(RNG_TypeDef *RNGx, uint32_t Config2)
 {
-  MODIFY_REG(RNGx->CR, RNG_CR_RNG_CONFIG2, Config2 << RNG_CR_RNG_CONFIG2_Pos);
+  MODIFY_REG(RNGx->CR, RNG_CR_RNG_CONFIG2 | RNG_CR_CONDRST, (Config2 << RNG_CR_RNG_CONFIG2_Pos) | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**
@@ -398,7 +404,8 @@ __STATIC_INLINE uint32_t LL_RNG_GetConfig2(const RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_SetConfig3(RNG_TypeDef *RNGx, uint32_t Config3)
 {
-  MODIFY_REG(RNGx->CR, RNG_CR_RNG_CONFIG3, Config3 << RNG_CR_RNG_CONFIG3_Pos);
+  MODIFY_REG(RNGx->CR, RNG_CR_RNG_CONFIG3 | RNG_CR_CONDRST, (Config3 << RNG_CR_RNG_CONFIG3_Pos) | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**
@@ -437,7 +444,8 @@ __STATIC_INLINE uint32_t LL_RNG_GetConfig3(const RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_SetClockDivider(RNG_TypeDef *RNGx, uint32_t Divider)
 {
-  MODIFY_REG(RNGx->CR, RNG_CR_CLKDIV, Divider << RNG_CR_CLKDIV_Pos);
+  MODIFY_REG(RNGx->CR, RNG_CR_CLKDIV | RNG_CR_CONDRST, Divider | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**
@@ -626,7 +634,8 @@ __STATIC_INLINE uint32_t LL_RNG_ReadRandData32(const RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_EnableArdis(RNG_TypeDef *RNGx)
 {
-  CLEAR_BIT(RNGx->CR, RNG_CR_ARDIS);
+  MODIFY_REG(RNGx->CR, RNG_CR_ARDIS | RNG_CR_CONDRST, LL_RNG_ARDIS_ENABLE | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**
@@ -637,7 +646,8 @@ __STATIC_INLINE void LL_RNG_EnableArdis(RNG_TypeDef *RNGx)
   */
 __STATIC_INLINE void LL_RNG_DisableArdis(RNG_TypeDef *RNGx)
 {
-  SET_BIT(RNGx->CR, RNG_CR_ARDIS);
+  MODIFY_REG(RNGx->CR, RNG_CR_ARDIS | RNG_CR_CONDRST, LL_RNG_ARDIS_DISABLE | RNG_CR_CONDRST);
+  CLEAR_BIT(RNGx->CR, RNG_CR_CONDRST);
 }
 
 /**

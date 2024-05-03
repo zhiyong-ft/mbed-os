@@ -9,14 +9,14 @@
   *           + Cache coherency command
   *           + Monitoring management
   ******************************************************************************
-    * @attention
+  * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   @verbatim
@@ -944,6 +944,22 @@ uint32_t HAL_DCACHE_Monitor_GetWriteMissValue(const DCACHE_HandleTypeDef *hdcach
 }
 
 /**
+  * @}
+  */
+
+/** @addtogroup DCACHE_Exported_Functions_Group3
+  *
+@verbatim
+  ==============================================================================
+            ##### DCACHE IRQ Handler and Callback functions #####
+  ==============================================================================
+  [..]
+  This section provides functions allowing to treat ISR and provide user callback
+@endverbatim
+  * @{
+  */
+
+/**
   * @brief Handle the Data Cache interrupt request.
   * @param  hdcache Pointer to a DCACHE_HandleTypeDef structure that contains
   *                 the configuration information for the specified DCACHEx peripheral.
@@ -1321,7 +1337,7 @@ __weak void HAL_DCACHE_ErrorCallback(DCACHE_HandleTypeDef *hdcache)
   * @}
   */
 
-/** @addtogroup DCACHE_Exported_Functions_Group3
+/** @addtogroup DCACHE_Exported_Functions_Group4
   *
 @verbatim
  ===============================================================================
@@ -1358,6 +1374,10 @@ uint32_t HAL_DCACHE_GetError(const DCACHE_HandleTypeDef *hdcache)
   /* Return DCACHE handle error code */
   return hdcache->ErrorCode;
 }
+
+/**
+  * @}
+  */
 
 /**
   * @}

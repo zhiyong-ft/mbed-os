@@ -6,12 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is provided to you as part of a software package and
+  * applicable license terms are in the  Package_license file. If you received this
+  * software component outside of a package or without applicable license terms,
+  * the terms of the Apache-2.0 license shall apply. 
+  * You may obtain a copy of the Apache-2.0 at:
+  * https://opensource.org/licenses/Apache-2.0
   *
   ******************************************************************************
   */
@@ -555,6 +555,7 @@ __STATIC_INLINE uint32_t LL_ICACHE_IsEnabledRegion(uint32_t Region)
 
 /**
   * @brief  Select the memory remapped region base address.
+  * @note   The useful bits depends on RSIZE as described in the Reference Manual.
   * @rmtoll CRRx         BASEADDR      LL_ICACHE_SetRegionBaseAddress
   * @param  Region This parameter can be one of the following values:
   *         @arg @ref LL_ICACHE_REGION_0
@@ -567,12 +568,13 @@ __STATIC_INLINE uint32_t LL_ICACHE_IsEnabledRegion(uint32_t Region)
 __STATIC_INLINE void LL_ICACHE_SetRegionBaseAddress(uint32_t Region, uint32_t Address)
 {
   MODIFY_REG(*((__IO uint32_t *)(&(ICACHE->CRR0) + (1U * Region))), \
-             ICACHE_CRRx_BASEADDR, (((Address & 0x1FFFFFFFU) >> 21U) & ICACHE_CRRx_BASEADDR));
+             ICACHE_CRRx_BASEADDR, ((Address & 0x1FFFFFFFU) >> 21U));
 }
 
 /**
   * @brief  Get the memory remapped region base address.
   * @note   The base address is the alias in the Code region.
+  * @note   The useful bits depends on RSIZE as described in the Reference Manual.
   * @rmtoll CRRx         BASEADDR      LL_ICACHE_GetRegionBaseAddress
   * @param  Region This parameter can be one of the following values:
   *         @arg @ref LL_ICACHE_REGION_0
@@ -584,18 +586,19 @@ __STATIC_INLINE void LL_ICACHE_SetRegionBaseAddress(uint32_t Region, uint32_t Ad
 __STATIC_INLINE uint32_t LL_ICACHE_GetRegionBaseAddress(uint32_t Region)
 {
   return (READ_BIT(*((__IO uint32_t *)(&(ICACHE->CRR0) + (1U * Region))), \
-                   ICACHE_CRRx_BASEADDR));
+                   ICACHE_CRRx_BASEADDR) << 21U);
 }
 
 /**
-  * @brief  Select the memory remapped region remap address.
+  * @brief  Select the memory remapped region address.
+  * @note   The useful bits depends on RSIZE as described in the Reference Manual.
   * @rmtoll CRRx         REMAPADDR     LL_ICACHE_SetRegionRemapAddress
   * @param  Region This parameter can be one of the following values:
   *         @arg @ref LL_ICACHE_REGION_0
   *         @arg @ref LL_ICACHE_REGION_1
   *         @arg @ref LL_ICACHE_REGION_2
   *         @arg @ref LL_ICACHE_REGION_3
-  * @param  Address  External memory address
+  * @param  Address  Memory address to remap
   * @retval None
   */
 __STATIC_INLINE void LL_ICACHE_SetRegionRemapAddress(uint32_t Region, uint32_t Address)
@@ -605,14 +608,15 @@ __STATIC_INLINE void LL_ICACHE_SetRegionRemapAddress(uint32_t Region, uint32_t A
 }
 
 /**
-  * @brief  Get the memory remapped region base address.
+  * @brief  Get the memory remapped region address.
+  * @note   The useful bits depends on RSIZE as described in the Reference Manual.
   * @rmtoll CRRx         REMAPADDR     LL_ICACHE_GetRegionRemapAddress
   * @param  Region This parameter can be one of the following values:
   *         @arg @ref LL_ICACHE_REGION_0
   *         @arg @ref LL_ICACHE_REGION_1
   *         @arg @ref LL_ICACHE_REGION_2
   *         @arg @ref LL_ICACHE_REGION_3
-  * @retval Address  External memory address
+  * @retval Address  Remapped memory address
   */
 __STATIC_INLINE uint32_t LL_ICACHE_GetRegionRemapAddress(uint32_t Region)
 {
