@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  ******************************************************************************
  *
- * Copyright (c) 2015-2023 STMicroelectronics.
+ * Copyright (c) 2015-2024 STMicroelectronics.
  * All rights reserved.
  *
  * This software component is licensed by ST under BSD 3-Clause license,
@@ -13,33 +13,35 @@
  ******************************************************************************
  */
 
-#ifndef __US_TICKER_DATA_H
-#define __US_TICKER_DATA_H
+#ifndef MBED_PWMOUT_DEVICE_H
+#define MBED_PWMOUT_DEVICE_H
+
+#include "cmsis.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "stm32h5xx.h"
-#include "stm32h5xx_ll_tim.h"
-#include "cmsis_nvic.h"
+#if DEVICE_PWMOUT
 
+typedef enum {
+    PWMOUT_ON_APB1 = 0,
+    PWMOUT_ON_APB2 = 1,
+    PWMOUT_UNKNOWN = 2
+} PwmoutApb;
 
-#define TIM_MST      TIM3
-#define TIM_MST_IRQ  TIM3_IRQn
-#define TIM_MST_RCC  __TIM3_CLK_ENABLE()
-#define TIM_MST_DBGMCU_FREEZE  __HAL_DBGMCU_FREEZE_TIM3()
+/*  Structure to describe Timers to APB */
+typedef struct pwm_apb_map {
+    PWMName pwm;   // an index entry for each EXIT line
+    PwmoutApb pwmoutApb;
+} pwm_apb_map_t;
 
-#define TIM_MST_RESET_ON   __TIM3_FORCE_RESET()
-#define TIM_MST_RESET_OFF  __TIM3_RELEASE_RESET()
+extern const pwm_apb_map_t pwm_apb_map_table[];
 
-#define TIM_MST_BIT_WIDTH  16 // 16 or 32
-
-#define TIM_MST_PCLK  1 // Select the peripheral clock number (1 or 2)*/
+#endif // DEVICE_PWMOUT
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __US_TICKER_DATA_H
-
+#endif
