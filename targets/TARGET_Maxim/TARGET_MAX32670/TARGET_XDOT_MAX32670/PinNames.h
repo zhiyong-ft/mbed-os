@@ -71,98 +71,106 @@ typedef enum {
 #if defined(MBED_CONF_TARGET_STDIO_UART_TX)
     CONSOLE_TX   = MBED_CONF_TARGET_STDIO_UART_TX,
 #else
-    CONSOLE_TX   = P0_9,
-#endif
+    CONSOLE_TX   = P0_29,
+#endif // MBED_CONF_TARGET_STDIO_UART_TX
+
 #if defined(MBED_CONF_TARGET_STDIO_UART_RX)
     CONSOLE_RX   = MBED_CONF_TARGET_STDIO_UART_RX,
 #else
-    CONSOLE_RX   = P0_8,
-#endif
+    CONSOLE_RX   = P0_28,
+#endif // MBED_CONF_TARGET_STDIO_UART_RX
+
     STDIO_UART_TX  = CONSOLE_TX,
     STDIO_UART_RX  = CONSOLE_RX,
 
-    // I2C pins
-    I2C0_SCL = P0_6,
-    I2C0_SDA = P0_7,
-    //
-    I2C1_SCL = P0_12,
-    I2C1_SDA = P0_13,
-    //
-    I2C2_SCL = P0_18,
-    I2C2_SDA = P0_19,
+// ----- Start of xDot external pin definitions -----
+    WAKE        = P0_19,
+    GPIO0       = P0_30,
+    GPIO1       = P0_27,
+    GPIO2       = P0_26,
+    GPIO3       = P0_25,
 
-    // SPI pins
-    SPI0_SCK  = P0_4,
-    SPI0_MOSI = P0_3,
-    SPI0_MISO = P0_2,
-    SPI0_SS   = P0_5,
+    // AT command port UART
+    UART_RX     = P0_8,
+    UART_TX     = P0_9,
+    UART_CTS    = P0_10,
+    UART_RTS    = P0_11,
 
-    SPI1_SCK  = P0_16,
-    SPI1_MOSI = P0_15,
-    SPI1_MISO = P0_14,
-    SPI1_SS   = P0_17,
+    UART0_RX    = UART_RX,
+    UART0_TX    = UART_TX,
+    UART0_CTS   = UART_CTS,
+    UART0_RTS   = UART_RTS,
 
-    SPI2_SCK  = P1_3,
-    SPI2_MOSI = P1_2,
-    SPI2_MISO = P1_1,
-    SPI2_SS   = P1_4,
+    // debug UART
+    UART1_RX   = P0_28,
+    UART1_TX   = P0_29,
 
-    // UART pins
-    UART0A_RX  = P0_8,
-    UART0A_TX  = P0_9,
-    UART0A_CTS = P0_10,
-    UART0A_RTS = P0_11,
+    // SwD
+    SWDIO       = P0_0,
+    SWCLK       = P0_1,
 
-    UART0B_RX  = P0_24,
-    UART0B_TX  = P0_25,
-    UART0B_CTS = P0_26,
-    UART0B_RTS = P0_27,
+    // I2C
+    I2C1_SCL    = P0_12,
+    I2C1_SDA    = P0_13,
 
-    UART1A_RX  = P0_28,
-    UART1A_TX  = P0_29,
-    UART1A_CTS = P0_30,
-    UART1A_RTS = P0_31,
+    // SPI
+    SPI0_SCK    = P0_4,
+    SPI0_MOSI   = P0_3,
+    SPI0_MISO   = P0_2,
+    SPI0_SS     = P0_5,
+// ----- End of xDot external pin definitions -----
 
-    UART1B_RX  = P0_2,
-    UART1B_TX  = P0_3,
-    UART1B_CTS = P0_4,
-    UART1B_RTS = P0_5,
+// ----- Start of xDot dedicated internal pins. -----
+    MEM_PWR_EN  = P0_24,     // Power to EEPROM, Flash & Secure element
+    FLASH_CS    = P0_23,
 
-    UART2B_RX  = P0_14,
-    UART2B_TX  = P0_15,
-    UART2B_CTS = P0_16,
-    UART2B_RTS = P0_17,
+    // EEPROM and SE I2C
+    I2C0_SCL    = P0_6,
+    I2C0_SDA    = P0_7,
+    SE_SDA      = I2C0_SDA,
+    SE_SCL      = I2C0_SCL,
 
-    LPUART0_RX  = P0_26,
-    LPUART0_TX  = P0_27,
-    LPUART0_CTS = P0_24,
-    LPUART0_RTS = P0_25,
+    // SX1262
+    SPI1_SCK    = P0_16,
+    SPI1_MOSI   = P0_15,
+    SPI1_MISO   = P0_14,
+    SPI1_SS     = P0_17,
+    LORA_MISO   = SPI1_MISO,
+    LORA_MOSI   = SPI1_MOSI,
+    LORA_SCK    = SPI1_SCK,
+    LORA_NSS    = SPI1_SS,
 
-    // To simplify usage
-    UART0_RX  = UART0A_RX,
-    UART0_TX  = UART0A_TX,
-    UART0_CTS = UART0A_CTS,
-    UART0_RTS = UART0A_RTS,
+    LORA_RESET  = P0_20,
+    LORA_BUSY   = P0_21,
+    LORA_DIO1   = P0_22,
 
-    UART1_RX  = UART1A_RX,
-    UART1_TX  = UART1A_TX,
-    UART1_CTS = UART1A_CTS,
-    UART1_RTS = UART1A_RTS,
+    RF_SW_CTRL  = P0_18,    // RF switch, active high
+// ----- End of xDot dedicated internal pins. -----
 
-    UART2_RX  = UART2B_RX,
-    UART2_TX  = UART2B_TX,
-    UART2_CTS = UART2B_CTS,
-    UART2_RTS = UART2B_RTS,
+// ----- Start of aliases for MAX32670 serial_api.c -----
+//  The xDot does not use these serial UARTs or the serial_api
+//  code. These pins are used on the xDot as detailed above.
+    UART0B_RX   = P0_24,
+    UART0B_TX   = P0_25,
 
-    UART3_RX  = LPUART0_RX,
-    UART3_TX  = LPUART0_TX,
-    UART3_CTS = LPUART0_CTS,
-    UART3_RTS = LPUART0_RTS,
+    UART1B_RX   = P0_2,
+    UART1B_TX   = P0_3,
 
+    UART2B_RX   = P0_14,
+    UART2B_TX   = P0_15,
+// ----- end of aliases for MAX32670 serial_api.c -----
 
     // Not connected
     NC = NOT_CONNECTED
 } PinName;
+
+#define LED1        P0_30
+#define I2C_SCL     I2C1_SCL
+#define I2C_SDA     I2C1_SDA
+#define SPI_MISO    SPI0_MISO
+#define SPI_MOSI    SPI0_MOSI
+#define SPI_SCK     SPI0_SCK
+#define SPI_NSS     SPI0_SS
 
 typedef enum {
     PullNone = 0,
@@ -175,17 +183,6 @@ typedef enum {
     LED_ON = 0,
     LED_OFF = 1
 } LedStates;
-
-
-// Standardized LED and button names
-#define LED1        P0_22  // Red Led
-#define LED2        P0_23  // Green Led
-//
-#define LED_RED     LED1   // 
-#define LED_GREEN   LED2   //
-
-//
-#define BUTTON1     P0_21  // B1 PushButton
 
 #ifdef __cplusplus
 }
