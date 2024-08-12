@@ -3092,11 +3092,10 @@
             "MBED_TICKLESS"
         ],
         "device_has_add": [
-            "MPU"
+            "MPU",
+            "ANALOGOUT"
         ],
         "device_has_remove": [
-            "ANALOGOUT",
-            "ANALOGIN",
             "FLASH",
             "LPTICKER",
             "CAN",
@@ -3139,6 +3138,9 @@
             // MCU VDD defaults to 3.3V though can be changed to 1.8V based on JP2 setting on nucleo board.
             "default-adc-vref": 3.3
         },
+        "device_has_remove": [
+            "ANALOGOUT" // both DAC pins are in conflict with LED1 and STDIO_UART_TX
+        ],
         "supported_form_factors": [
             "ARDUINO_UNO"
         ],
