@@ -1,5 +1,5 @@
 /* mbed Microcontroller Library
- * Copyright (c) 2016-2022 STMicroelectronics
+ * Copyright (c) 2016-2024 STMicroelectronics
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,6 +64,7 @@ struct i2c_s {
     volatile uint8_t event;
 
     int current_hz;
+    
 #if DEVICE_I2CSLAVE
     uint8_t slave;
     volatile uint8_t pending_slave_tx_master_rx;
