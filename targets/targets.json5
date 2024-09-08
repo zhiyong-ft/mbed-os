@@ -3093,16 +3093,14 @@
         ],
         "device_has_add": [
             "MPU",
-            "ANALOGOUT"
+            "ANALOGOUT",
+            "SPI_32BIT_WORDS"
         ],
         "device_has_remove": [
             "FLASH",
             "LPTICKER",
             "CAN",
 			"SERIAL_FC",
-            "SPI",
-            "SPISLAVE",
-            "SPI_ASYNCH",
             "WATCHDOG",
             "ETHERNET",
             "EMAC"
