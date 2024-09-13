@@ -15,16 +15,7 @@
  ******************************************************************************
 */
 
-#include "../cmsis_nvic.h"
-
-
-#if !defined(MBED_APP_START)
-  #define MBED_APP_START  MBED_ROM_START
-#endif
-
-#if !defined(MBED_APP_SIZE)
-  #define MBED_APP_SIZE  MBED_ROM_SIZE
-#endif
+#include "cmsis_nvic.h"
 
 #if !defined(MBED_CONF_TARGET_BOOT_STACK_SIZE)
     /* This value is normally defined by the tools
@@ -37,12 +28,12 @@
 
 MEMORY
 {
-  FLASH (rx)     : ORIGIN = MBED_APP_START, LENGTH = MBED_APP_SIZE
-  DTCMRAM (rwx)  : ORIGIN = NVIC_RAM_VECTOR_ADDRESS + VECTORS_SIZE, LENGTH = 128K - VECTORS_SIZE
-  RAM (xrw)      : ORIGIN = MBED_RAM_START, LENGTH = MBED_RAM_SIZE
-  RAM_D2 (xrw)   : ORIGIN = 0x30000000, LENGTH = 288K
-  RAM_D3 (xrw)   : ORIGIN = 0x38000000, LENGTH = 64K
-  ITCMRAM (xrw)  : ORIGIN = 0x00000000, LENGTH = 64K
+  FLASH (rx)     : ORIGIN = MBED_CONFIGURED_ROM_START, LENGTH = MBED_CONFIGURED_ROM_SIZE
+  DTCMRAM (rwx)  : ORIGIN = MBED_RAM_BANK_SRAM_DTC_START + VECTORS_SIZE, LENGTH = 128K - MBED_RAM_BANK_SRAM_DTC_SIZE
+  RAM (xrw)      : ORIGIN = MBED_RAM_BANK_SRAM_D1_START, LENGTH = MBED_RAM_BANK_SRAM_D1_SIZE
+  RAM_D2 (xrw)   : ORIGIN = MBED_RAM_BANK_SRAM_D2_START, LENGTH = MBED_RAM_BANK_SRAM_D2_SIZE
+  RAM_D3 (xrw)   : ORIGIN = MBED_RAM_BANK_SRAM_D3_START, LENGTH = MBED_RAM_BANK_SRAM_D3_SIZE
+  ITCMRAM (xrw)  : ORIGIN = MBED_RAM_BANK_SRAM_ITC_START, LENGTH = MBED_RAM_BANK_SRAM_ITC_SIZE
 }
 
 /* Linker script to place sections and symbol values. Should be used together
@@ -206,16 +197,16 @@ SECTIONS
     ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
 
     .lwip_sec (NOLOAD) : {
-        . = ABSOLUTE(0x30040000);
+        . = ABSOLUTE(0x10040000);
         *(.RxDecripSection)
 
-        . = ABSOLUTE(0x30040100);
+        . = ABSOLUTE(0x10040100);
         *(.TxDecripSection)
 
-        . = ABSOLUTE(0x30040400);
+        . = ABSOLUTE(0x10040400);
         *(.RxArraySection)
 
-        . = ABSOLUTE(0x30044000);
+        . = ABSOLUTE(0x10044000);
         *(.ethusbram)
 
     } >RAM_D2 AT> FLASH
