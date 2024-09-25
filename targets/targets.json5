@@ -768,7 +768,7 @@
     },
     "KW41Z": {
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "core": "Cortex-M0+",
         "supported_toolchains": [
@@ -6103,7 +6103,7 @@
             "RZ_A1XX"
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "extra_labels_add": [
             "RZA1H",
@@ -6695,7 +6695,7 @@
     },
     "MCU_EFM32_GECKO": { // Family target for EFM32 Gecko MCUs
         "inherits": [
-            "Target"
+            "EFM32"
         ],
         "device_has": [
             "ANALOGIN",
@@ -8814,7 +8814,7 @@
             "CYW43XXX"
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "device_has_remove": [
             "ANALOGOUT"
@@ -8902,7 +8902,7 @@
             "CYW43XXX",
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "extra_labels_add": [
             "PSOC6_01",
@@ -8949,7 +8949,7 @@
             "USBDEVICE"
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "extra_labels_add": [
             "PSOC6_01",
@@ -8988,7 +8988,7 @@
             "BLE"
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "components_add": [
             "WHD",
@@ -9042,7 +9042,7 @@
             "BLE"
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "components_add": [
             "WHD",
@@ -9086,7 +9086,7 @@
             "MCU_PSOC6_M4"
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "features": [
             "BLE"
@@ -9140,7 +9140,7 @@
             "MCU_PSOC6_M4"
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "features_add": [
             "BLE",
@@ -9251,7 +9251,7 @@
             "GD32_Target"
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "core": "Cortex-M4F",
         "extra_labels_add": [
@@ -9286,6 +9286,7 @@
         "overrides": {
             "network-default-interface-type": "ETHERNET"
         },
+        "device_name": "GD32F307VG",
         "image_url": "https://os.mbed.com/media/uploads/Ray_Chen/307-1.png"
     },
     "GD32_F450ZI": {
@@ -9293,7 +9294,7 @@
             "GD32_Target"
         ],
         "supported_form_factors": [
-            "ARDUINO"
+            "ARDUINO_UNO"
         ],
         "core": "Cortex-M4F",
         "extra_labels_add": [
