@@ -58,6 +58,7 @@ typedef enum {
     LED_GREEN= LED2,
     LED_BLUE = LED3,
     LED_USER = LED4,
+#define BUTTON0 P6_0
 
     CONSOLE_TX = P6_3,
     CONSOLE_RX = P6_2,
