@@ -60,8 +60,7 @@ function(mbed_setup_linker_script mbed_os_target mbed_baremetal_target target_de
     add_custom_command(
         OUTPUT
             ${LINKER_SCRIPT_PATH}
-        PRE_LINK
-        COMMAND 
+        COMMAND
             ${CMAKE_COMMAND} -E echo "Preprocess linker script: ${RAW_LINKER_SCRIPT_NAME} -> ${LINKER_SCRIPT_NAME}"
         COMMAND
             ${CMAKE_C_COMPILER} @${linker_defs_response_file}
@@ -115,7 +114,7 @@ endfunction(mbed_setup_linker_script)
 function(mbed_set_custom_linker_script target new_linker_script_path)
 
     set(RAW_LINKER_SCRIPT_PATHS  ${CMAKE_CURRENT_SOURCE_DIR}/${new_linker_script_path})
-    set(CUSTOM_LINKER_SCRIPT_PATH ${CMAKE_CURRENT_BINARY_DIR}/${target}.link_spript.ld)
+    set(CUSTOM_LINKER_SCRIPT_PATH ${CMAKE_CURRENT_BINARY_DIR}/${target}.link_script.ld)
 
     # To avoid path limits on Windows, we create a "response file" and set the path to it as a
     # global property. We need this solely to pass the compile definitions to GCC's preprocessor,
@@ -130,7 +129,7 @@ function(mbed_set_custom_linker_script target new_linker_script_path)
             ${target}
         PRE_LINK
         COMMAND 
-            ${CMAKE_COMMAND} -E echo "Preprocess custom linker script: ${RAW_LINKER_SCRIPT_NAME} -> ${LINKER_SCRIPT_NAME}"
+            ${CMAKE_COMMAND} -E echo "Preprocess custom linker script ${RAW_LINKER_SCRIPT_NAME} to ${LINKER_SCRIPT_NAME}"
         COMMAND
             ${CMAKE_C_COMPILER} @${linker_defs_response_file}
             -E -x assembler-with-cpp
@@ -151,6 +150,6 @@ function(mbed_set_custom_linker_script target new_linker_script_path)
         PRIVATE
             "-T" "${CUSTOM_LINKER_SCRIPT_PATH}"
     )
-    set_property(TARGET ${target} APPEND PROPERTY LINK_DEPENDS ${CUSTOM_LINKER_SCRIPT_PATH})
+    set_property(TARGET ${target} APPEND PROPERTY LINK_DEPENDS ${RAW_LINKER_SCRIPT_PATHS})
 
 endfunction(mbed_set_custom_linker_script)
