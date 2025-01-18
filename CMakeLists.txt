@@ -4,7 +4,7 @@
 # This is the boilerplate for Mbed OS
 
 cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
-cmake_policy(VERSION 3.16...3.22)
+cmake_policy(VERSION 3.19...3.22)
 
 # Setup build type (target type, tests/unit tests/real build) ----------------------------------------------------------------------------------
 # This block sets up the following variables for all subdirs to use:
@@ -56,7 +56,14 @@ if(MBED_IS_STANDALONE AND NOT MBED_IS_NATIVE_BUILD)
     set(MBED_CONFIG_PATH ${CMAKE_CURRENT_BINARY_DIR} CACHE STRING "")
 
     # Initialize Mbed build system
-    include(${CMAKE_CURRENT_LIST_DIR}/tools/cmake/app.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/tools/cmake/mbed_toolchain_setup.cmake)
+endif()
+
+# Create project and find compilers (if not already found)
+project(mbed-os LANGUAGES C CXX ASM)
+
+if(MBED_IS_STANDALONE AND NOT MBED_IS_NATIVE_BUILD)
+    include(mbed_project_setup)
 endif()
 
 if(MBED_IS_NATIVE_BUILD)
@@ -84,9 +91,6 @@ if(DEFINED MBED_OS_CI_UPLOAD_METHOD_CONFIG)
 endif()
 
 # Create core Mbed OS targets and set up build flags  ----------------------------------------------------------------------------------
-
-# Create project and find compilers (if not already found)
-project(mbed-os LANGUAGES C CXX ASM)
 
 # Add all paths to the module files within Mbed OS
 list(APPEND CMAKE_MODULE_PATH
@@ -308,20 +312,4 @@ if(NOT MBED_IS_NATIVE_BUILD)
     # Make sure that things linking mbed-core-flags can also get the target-specific include dirs and flags.
     mbed_extract_flags(${MBED_TARGET_CMAKE_NAME}-flags ${MBED_TARGET_CMAKE_NAME})
     target_link_libraries(mbed-core-flags INTERFACE ${MBED_TARGET_CMAKE_NAME}-flags)
-endif()
-
-# Ninja requires to be forced for response files
-if ("${CMAKE_GENERATOR}" MATCHES "Ninja")
-    # known issue ARMClang and Ninja with response files for windows
-    # https://gitlab.kitware.com/cmake/cmake/-/issues/21093
-    # This gets fixed in newer cmake version
-    # https://gitlab.kitware.com/cmake/cmake/-/merge_requests/6484
-    if((CMAKE_HOST_SYSTEM_NAME MATCHES "Windows") AND ((${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.22.0") OR (NOT CMAKE_CXX_COMPILER_ID MATCHES "ARMClang")))
-        set(CMAKE_NINJA_FORCE_RESPONSE_FILE 1 CACHE INTERNAL "")
-    endif()
-endif()
-
-# If this is the top-level buildscript, run finalize tasks
-if(MBED_IS_STANDALONE AND (NOT MBED_IS_NATIVE_BUILD))
-    mbed_finalize_build()
 endif()
