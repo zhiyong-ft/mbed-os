@@ -116,10 +116,28 @@ endif()
 # These targets are made visible here so their source files which
 # are spread in different directories can be referenced and can be linked against
 # by libraries that depend on them.
-add_library(mbed-rtos-flags INTERFACE) # Collects source files that are in mbed-os but not mbed-baremetal
-add_library(mbed-rtos-sources INTERFACE) # Collects flags that are in mbed-os but not mbed-baremetal
-add_library(mbed-core-flags INTERFACE) # Collects flags common to mbed-baremetal and mbed-os
-add_library(mbed-core-sources INTERFACE) # Collects source files common to mbed-baremetal and mbed-os
+add_library(mbed-rtos-flags INTERFACE) # Collects flags that are in mbed-os but not mbed-baremetal
+add_library(mbed-rtos-sources INTERFACE) # Collects source files that are in mbed-os but not mbed-baremetal
+add_library(mbed-core-flags INTERFACE) # Collects flags that are in mbed-os or mbed-baremetal
+                                       # depending on target.application-profile setting
+add_library(mbed-core-sources INTERFACE) # Collects source files that are in mbed-os or mbed-baremetal
+                                         # depending on target.application-profile setting
+
+if("MBED_CONF_TARGET_APPLICATION_PROFILE=full" IN_LIST MBED_CONFIG_DEFINITIONS)
+    set(APPLICATION_PROFILE_CONFIG_FULL TRUE)
+endif()
+if("MBED_CONF_TARGET_APPLICATION_PROFILE=bare-metal" IN_LIST MBED_CONFIG_DEFINITIONS)
+    set(APPLICATION_PROFILE_CONFIG_BAREMETAL TRUE)
+endif()
+if(NOT APPLICATION_PROFILE_CONFIG_FULL AND NOT APPLICATION_PROFILE_CONFIG_BAREMETAL)
+    set(APPLICATION_PROFILE_CONFIG_AUTO TRUE)
+endif()
+
+# mbed-core-flags/mbed-core-sources link mbed-rtos-flags/mbed-rtos-sources or not
+if(APPLICATION_PROFILE_CONFIG_AUTO OR APPLICATION_PROFILE_CONFIG_FULL)
+    target_link_libraries(mbed-core-flags INTERFACE mbed-rtos-flags)
+    target_link_libraries(mbed-core-sources INTERFACE mbed-rtos-sources)
+endif()
 
 # Validate selected C library type
 # The C library type selected has to match the library that the target can support
@@ -282,10 +300,10 @@ if(NOT MBED_IS_NATIVE_BUILD)
     # Note that many different source files will compile differently depending on if the RTOS is in use.
     # So, it's needed to compile the core sources twice, once for RTOS and once for non-RTOS.
     mbed_create_distro(mbed-baremetal ${MBED_TARGET_CMAKE_NAME} mbed-core-flags mbed-core-sources)
-    mbed_create_distro(mbed-os ${MBED_TARGET_CMAKE_NAME} mbed-core-flags mbed-core-sources mbed-rtos-flags mbed-rtos-sources)
+    mbed_create_distro(mbed-os ${MBED_TARGET_CMAKE_NAME} mbed-core-flags mbed-core-sources)
 
     # Set up the linker script and hook it up to the top-level OS targets
-    mbed_setup_linker_script(mbed-baremetal mbed-os ${CMAKE_CURRENT_BINARY_DIR}/generated-headers/mbed-target-config.h)
+    mbed_setup_linker_script(mbed-os mbed-baremetal ${CMAKE_CURRENT_BINARY_DIR}/generated-headers/mbed-target-config.h)
 
     # Make sure that things linking mbed-core-flags can also get the target-specific include dirs and flags.
     mbed_extract_flags(${MBED_TARGET_CMAKE_NAME}-flags ${MBED_TARGET_CMAKE_NAME})
