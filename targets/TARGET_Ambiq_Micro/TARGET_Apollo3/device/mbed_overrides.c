@@ -1,5 +1,6 @@
 /* mbed Microcontroller Library
- * Copyright (c) 2006-2013 ARM Limited
+ * Copyright (c) 2025 Jamie Smith
+ * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,47 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// SPDX-License-Identifier: Apache-2.0
-#ifndef MBED_PERIPHERALNAMES_H
-#define MBED_PERIPHERALNAMES_H
 
-#include "cmsis.h"
+#include <mbed_boot.h>
 
-#ifdef __cplusplus
-extern "C"
+#include <stddef.h>
+
+// Needed for am_hal_clkgen.h
+#include <stdbool.h>
+#include <apollo3.h>
+
+#include <am_hal_clkgen.h>
+
+void mbed_sdk_init(void)
 {
-#endif
-
-#define STDIO_UART UART_0
-
-typedef enum {
-    UART_0 = 0,
-    UART_1,
-
-    UART_NUM,
-    UART_ANY
-} UARTName;
-
-typedef enum {
-    IOM_0 = 0,
-    IOM_1,
-    IOM_2,
-    IOM_3,
-    IOM_4,
-    IOM_5,
-
-    IOM_NUM,
-    IOM_ANY
-} IOMName;
-
-// Each IOM can be used as an SPI
-#define DEVICE_SPI_COUNT 6
-
-typedef IOMName SPIName;
-typedef IOMName I2CName;
-
-#ifdef __cplusplus
+    // Turn on frequency adjustment. This improves HFRC clock accuracy by a factor
+    // of 10 or more.
+    am_hal_clkgen_control(AM_HAL_CLKGEN_CONTROL_HFADJ_ENABLE, NULL);
 }
-#endif
-
-#endif

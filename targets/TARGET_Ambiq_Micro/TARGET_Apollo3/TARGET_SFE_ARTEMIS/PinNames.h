@@ -128,6 +128,9 @@ typedef enum
     SERIAL1_TX = IO_24,
     SERIAL1_RX = IO_25,
 
+    // Not a real pin on the device, but can be passed to AnalogIn to read the internal temperature sensor
+    INT_TEMP_SENSOR = 0x10000,
+
     // Not connected
     NC = NC_VAL
 } PinName;
@@ -139,11 +142,6 @@ typedef enum
 // note: I2C_SCL and I2C_SDA defines are provided by the FF_ARDUINO_UNO header
 #define QWIIC_SCL I2C_SCL
 #define QWIIC_SDA I2C_SDA
-
-// SPI bus
-#define SPI_SCLK IO_5
-#define SPI_MOSI IO_7
-#define SPI_MISO IO_6
 
 #if defined(MBED_CONF_TARGET_STDIO_UART_TX)
 #define STDIO_UART_TX MBED_CONF_TARGET_STDIO_UART_TX
