@@ -18,8 +18,15 @@
 #ifndef __RP2040_CMSIS_H__
 #define __RP2040_CMSIS_H__
 
+#if PICO_RP2040
 #include "RP2040.h"
 #include "system_RP2040.h"
+#elif PICO_RP2350
+#include "RP2350.h"
+#include "system_RP2350.h"
+#else
+#error "Unknown MCU-specific header!"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,6 +37,8 @@ extern uint32_t ram_vector_table[]; // defined in runtime_init.c
 
 #if PICO_RP2040
 #define NVIC_NUM_VECTORS 42
+#elif PICO_RP2350
+#define NVIC_NUM_VECTORS 60
 #else
 #error "Unknown number of vectors!"
 #endif

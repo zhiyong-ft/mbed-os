@@ -4,7 +4,12 @@
 # RP2040 sources
 target_sources(mbed-mcu-rp2040
     INTERFACE
-        PeripheralPins.c
+        rtc_api.c
+        lp_ticker_from_rtc.c
+)
+target_include_directories(mbed-mcu-rp2040
+        INTERFACE
+        .
 )
 
 if(MCU_RP2040 IN_LIST MBED_TARGET_LABELS)
