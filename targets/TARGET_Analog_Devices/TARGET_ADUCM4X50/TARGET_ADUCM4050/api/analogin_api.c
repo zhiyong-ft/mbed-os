@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2010-2017 Analog Devices, Inc.
+ * SPDX-License-Identifier: adi-bsd
  *
  * All rights reserved.
  *
@@ -40,6 +41,8 @@
 
 #include "mbed_assert.h"
 #include "analogin_api.h"
+
+#include <string.h>
 
 #if DEVICE_ANALOGIN
 
