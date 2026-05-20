@@ -20,6 +20,7 @@ A message that notes the main changes in the update.
   - `SFE_THING_PLUS_RP2040` board target added for the [SparkFun Thing Plus RP2040 board](https://www.sparkfun.com/sparkfun-thing-plus-rp2040.html)
   - MPU configuration support added
   - RP235x target family added, containing two boards to start, `RASPBERRY_PI_PICO_2` and `OLIMEX_RP2350_PICO2_XL`
+  - Support for single-byte i2c operations implemented (allowing features like the I2C EEPROM block device to work).
 
 ### Changed
 - Reworked targets CMake code to only recurse into the subdir for the current target family, which should speed up the CMake configure a bit
@@ -64,6 +65,11 @@ A message that notes the main changes in the update.
 - Fixed memory leak with Nanostack memory manager that caused the stack to run of memory when used with zero-copy Ethernet drivers
 - LPC17xx:
   - Fixed I2C single-byte API continuing to send bytes after being NACKed
+- RP2xxx:
+  - Fixed issue where reading from an I2C master in slave mode could put the I2C peripheral in a bad state if the master transferred
+    more bytes than expected
+  - Fixed issue where reading from an I2C master in slave mode could hang forever if the master ends the transaction early
+  - Fixed issue where writing to an I2C master in slave mode would always return success regardless of success/failure
 
 ### Removed
 - Target Uhuru Raven (STM32F7) has been removed due to market availability (it is still possible to use it with release Mbed-os 7)
