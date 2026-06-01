@@ -8373,6 +8373,9 @@ mode is recommended for target MCUs with small amounts of flash and RAM.",
 
             "mpu-rom-end": "0x13FFFFFF", // Flash memory ends at 0x10FFFFFF, rounding up to next supported value
             "mpu-ram-start": "MBED_RAM_BANK_IRAM1_START",
+
+            // Sleep wakeup latency, measured on hardware
+            "deep-sleep-latency": 1, // ms
         },
         "device_has": [
             "ANALOGIN",
@@ -8388,7 +8391,8 @@ mode is recommended for target MCUs with small amounts of flash and RAM.",
             "WATCHDOG",
             "USBDEVICE",
             "RESET_REASON",
-            "MPU"
+            "MPU",
+            "SLEEP"
         ],
         "macros_add": [
             "PICO_TIME_DEFAULT_ALARM_POOL_DISABLED",
@@ -8410,8 +8414,11 @@ mode is recommended for target MCUs with small amounts of flash and RAM.",
         "device_name": "RP2040",
 
         "device_has_add": [
-            // Only RP2040 has a dedicated RTC, it was removed in later chips
-            "RTC"
+            // Only RP2040 has a dedicated RTC, it was removed in later chips.
+            // Also note that the RTC is the only LP-ticker-like feature this chip has,
+            // but is unsuited to being used as an LP ticker because it only counts at 1Hz.
+            // So, RP2040 does not support LPTICKER.
+            "RTC",
         ],
 
         "macros_add": [
@@ -8435,7 +8442,7 @@ mode is recommended for target MCUs with small amounts of flash and RAM.",
             "PICO_RP2350=1"
         ],
         "device_has_add": [
-            "MPU"
+            "LPTICKER"
         ],
 
         "device_has_remove": [
@@ -8447,7 +8454,13 @@ mode is recommended for target MCUs with small amounts of flash and RAM.",
             "WATCHDOG",
             "USBDEVICE",
             "RESET_REASON"
-        ]
+        ],
+        "config": {
+            "lpticker-use-lposc": {
+                "value": false,
+                "help": "If left at false, the LP Ticker (which uses the POWMAN always-on timer internally) will run off the XOSC. If changed to true, the LPTICKER will run off the LPOSC. This supports deeper sleep modes but has a limited frequency accuracy of +-20% (untrimmed)."
+            }
+        }
     },
 
     // Target for RP2350 family MCU

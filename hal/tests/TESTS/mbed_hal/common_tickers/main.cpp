@@ -202,6 +202,9 @@ void ticker_init_test()
     }
 
     TEST_ASSERT(intf->read() >= (ticks_start + 2 * TICKER_INT_VAL));
+
+    printf("ticks_start = %" PRIu32 ", ticks_after_reinit = %" PRIu32 "\n", ticks_start, ticks_after_reinit);
+
     TEST_ASSERT(ticks_start <= ticks_after_reinit);
     TEST_ASSERT_EQUAL(0, intFlag);
 }
@@ -671,7 +674,7 @@ Case cases[] = {
 #endif
 };
 
-Specification specification(test_setup, cases);
+Specification specification(test_setup, cases, greentea_continue_handlers);
 
 int main()
 {
