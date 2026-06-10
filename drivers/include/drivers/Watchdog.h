@@ -60,6 +60,11 @@ namespace mbed {
  * }
  * @endcode
  *
+ * @note The watchdog is still able to count down and time out when the device is in sleep and deep sleep mode.
+ *    However, on some devices (Kinetis MCUs), if the watchdog times out during deep sleep mode, the timer will reset
+ *    and count up to the timeout value again before resetting the system. This means that if your MCU may be
+ *    in deep sleep mode when the timer times out, allow for up to double the configured watchdog time before timeout.
+ *
  * @note Synchronization level: Interrupt safe
  */
 class Watchdog : private NonCopyable<Watchdog>  {
