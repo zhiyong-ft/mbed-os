@@ -42,6 +42,7 @@ void hal_sleep(void) {
 #endif
 
 static void reconfigure_clock_tree_for_deepsleep() {
+
     // Slow down CLK_REF and CLK_SYS by running them directly off the XOSC
     clock_configure_undivided(clk_ref,
                     CLOCKS_CLK_REF_CTRL_SRC_VALUE_XOSC_CLKSRC,
