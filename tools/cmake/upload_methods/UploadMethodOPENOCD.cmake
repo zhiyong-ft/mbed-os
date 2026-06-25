@@ -109,9 +109,20 @@ set(UPLOAD_LAUNCH_COMMANDS
 	# that on certain devices (e.g. PSoC 62) it works while 'load' does not.
 	"monitor program"
 
+	# Set temp breakpoint at main
 	"tbreak main"
+
 	${OPENOCD_GDB_RESET_SEQUENCE}
 )
+
+if("MBED_CONF_TARGET_CONSOLE_RTT=1" IN_LIST MBED_CONFIG_DEFINITIONS)
+	set(UPLOAD_POST_LAUNCH_COMMANDS
+		# Start RTT (this needs the CB to be initialized)
+		"monitor rtt setup ${MBED_RTT_RAM_RANGE_START} ${MBED_RTT_RAM_RANGE_SIZE}"
+		"monitor rtt start"
+		"monitor rtt server start ${MBED_RTT_PORT} 0 \"OpenOCD Mbed RTT Console\"")
+endif()
+
 set(UPLOAD_RESTART_COMMANDS
 	${OPENOCD_GDB_RESET_SEQUENCE}
 

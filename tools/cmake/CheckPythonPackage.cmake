@@ -4,8 +4,22 @@
 # CMake functions for checking for Python packages
 # Requires PYTHON_EXECUTABLE to be defined.  Call FindPython first!
 
-# set OUTPUT_VAR to whether PACKAGENAME was found
+#
+# Checks a python package in the current active Python interpreter.
+#
+# Usage: check_python_package(<package name> <result variable> [VERSION x.y.z])
+#
+# <result variable> will be set to TRUE iff the package is found in the current active python
+#     interpreter and is at least the specified version (if given).
+#
+# The following variables are also created:
+#  - PY_INTERP_FOR_<result variable>: Set to the path to the python interpreter used to run this check.
+#  - <result variable>_VERSION: Set to the version of the package from the most recent run of this check,
+#      if version checking was successful.
+#
 function(check_python_package PACKAGENAME OUTPUT_VAR)
+    cmake_parse_arguments(ARG "" "VERSION" "" ${ARGN})
+
     # can't have Python packages without Python!
     if(NOT Python3_FOUND)
         set(${OUTPUT_VAR} FALSE PARENT_SCOPE)
@@ -18,7 +32,9 @@ function(check_python_package PACKAGENAME OUTPUT_VAR)
         if(${OUTPUT_VAR})
             # if the python interpreter changed, we need to recheck
             if("${PY_INTERP_FOR_${OUTPUT_VAR}}" STREQUAL "${Python3_EXECUTABLE}")
-                set(NEED_TO_RUN_CHECK FALSE)
+                if((NOT DEFINED ARG_VERSION) OR (DEFINED ${OUTPUT_VAR}_VERSION AND "${${OUTPUT_VAR}_VERSION}" VERSION_GREATER_EQUAL "${ARG_VERSION}"))
+                    set(NEED_TO_RUN_CHECK FALSE)
+                endif()
             endif()
         endif()
     endif()
@@ -30,7 +46,7 @@ function(check_python_package PACKAGENAME OUTPUT_VAR)
             COMMAND ${Python3_EXECUTABLE} -c "import ${PACKAGENAME}"
             RESULT_VARIABLE PACKAGECHECK_RESULT
             ERROR_QUIET
-         )
+        )
 
         if(${PACKAGECHECK_RESULT} EQUAL 0)
             set(HAVE_PACKAGE TRUE)
@@ -38,8 +54,51 @@ function(check_python_package PACKAGENAME OUTPUT_VAR)
             set(HAVE_PACKAGE FALSE)
         endif()
 
+        # Also check the version. The way to do this is different in new and old python versions.
         if(HAVE_PACKAGE)
-            message(STATUS "Checking for Python package ${PACKAGENAME} -- found")
+            if(${Python3_VERSION} VERSION_GREATER_EQUAL 3.8)
+                execute_process(
+                    COMMAND ${Python3_EXECUTABLE} -c "from importlib.metadata import version; print(version(\"${PACKAGENAME}\"))"
+                    OUTPUT_VARIABLE PACKAGECHECK_VERSION
+                    RESULT_VARIABLE VERSION_CHECK_RESULT
+                    ERROR_QUIET
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                )
+            else()
+                execute_process(
+                    COMMAND ${Python3_EXECUTABLE} -c "import pkg_resources; print(pkg_resources.get_distribution(\"${PACKAGENAME}\").version)"
+                    OUTPUT_VARIABLE PACKAGECHECK_VERSION
+                    RESULT_VARIABLE VERSION_CHECK_RESULT
+                    ERROR_QUIET
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                )
+            endif()
+
+            # Note: the version check may fail if someone asks us to check a sub-package of another package,
+            # so (for now) silently ignore that unless we are required to check the version.
+            if(VERSION_CHECK_RESULT EQUAL 0)
+                set(${OUTPUT_VAR}_VERSION ${PACKAGECHECK_VERSION} CACHE INTERNAL "Detected version of the Python package ${PACKAGENAME}" FORCE)
+            endif()
+
+            if(DEFINED ARG_VERSION AND NOT DEFINED ${OUTPUT_VAR}_VERSION)
+                message(STATUS "Version check for ${PACKAGENAME} failed.")
+            endif()
+        endif()
+
+        if(HAVE_PACKAGE)
+            if(DEFINED ARG_VERSION AND NOT DEFINED ${OUTPUT_VAR}_VERSION)
+                message(STATUS "Checking for Python package ${PACKAGENAME} -- found but version check failed")
+                set(HAVE_PACKAGE FALSE)
+            elseif(DEFINED ARG_VERSION AND ("${PACKAGECHECK_VERSION}" VERSION_LESS "${ARG_VERSION}"))
+                message(STATUS "Checking for Python package ${PACKAGENAME} -- found but too old (version ${PACKAGECHECK_VERSION}, need >=${ARG_VERSION})")
+                set(HAVE_PACKAGE FALSE)
+            else()
+                if(DEFINED ${OUTPUT_VAR}_VERSION)
+                    message(STATUS "Checking for Python package ${PACKAGENAME} -- found (version ${PACKAGECHECK_VERSION})")
+                else()
+                    message(STATUS "Checking for Python package ${PACKAGENAME} -- found")
+                endif()
+            endif()
         else()
             message(STATUS "Checking for Python package ${PACKAGENAME} -- not found")
         endif()
