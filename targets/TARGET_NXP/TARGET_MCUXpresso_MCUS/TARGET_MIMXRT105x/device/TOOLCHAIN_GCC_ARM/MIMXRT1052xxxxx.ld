@@ -282,6 +282,7 @@ SECTIONS
   .ncache :
   {
     *(NonCacheable)
+    *(.noncached)
     . = ALIGN(8);
     __noncachedata_end__ = .;     /* define a global symbol at ncache data end */
   } > m_dtcm :ram_ncache_noinit

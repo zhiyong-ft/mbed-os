@@ -28,6 +28,9 @@
 #include "us_ticker_api.h"
 #include "flash_api.h"
 
+#include <mbed_math_helpers.h>
+#include <mbed_assert.h>
+
 #if DEVICE_FLASH
 #include "mimxrt_flash_api.h"
 #endif
@@ -42,6 +45,10 @@
 
 uint8_t mbed_otp_mac_address(char *mac);
 void mbed_default_mac_address(char *mac);
+
+// Symbols defined in linker script for noncache region
+extern uint8_t __noncached_start[];
+extern uint8_t __noncached_end[];
 
 /* MPU configuration. */
 void BOARD_ConfigMPU(void)
@@ -126,8 +133,6 @@ void BOARD_ConfigMPU(void)
     MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_512KB);
 
 #endif
-
-
 
 /* The define sets the cacheable memory to shareable,
  * this suggestion is referred from chapter 2.2.1 Memory regions,
