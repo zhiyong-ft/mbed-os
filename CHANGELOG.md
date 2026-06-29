@@ -68,6 +68,9 @@ A message that notes the main changes in the update.
   - The `POWER_ON` reset reason is no longer supported on RP2040 because it could also be [erroneously triggered for non-actual-power-on reasons](https://forums.raspberrypi.com/viewtopic.php?p=2378084), like flashing code through OpenOCD. Mbed now returns the unknown reset reason if this flag is set in HW.
 - STM32H5/H7
   - `mem-size` of lwIP stack increased to 32768 from default 4000
+- ESP32 Wi-Fi driver
+  - Added tested working modules and their firmware version
+  - Added note to increase RX buffer size to ensure data integrity and system stability
 ### Deprecated
 
 ### Fixed
